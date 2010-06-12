@@ -1,0 +1,14 @@
+<% content_for :title do %>
+Member list
+<% end %> 
+<h1>Member list</h1>
+<% if @members.blank? %>
+<p>There are no members currently in the system.</p>
+<% else %>
+<ul id="members">
+<% @members.each do |c| %>
+<li><%= link_to c.first_name, {:action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+<p><%= link_to "Add new Member", {:action => 'new' }%></p>

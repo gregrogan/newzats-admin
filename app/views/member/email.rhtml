@@ -1,0 +1,12 @@
+<% content_for :title do %>
+Email members
+<% end %> 
+<h1>Email members</h1>
+<br/>
+
+<a href="mailto:?bcc=
+<%= 
+@members.each {|x| print x.email }
+
+%>
+">Email all members</a>

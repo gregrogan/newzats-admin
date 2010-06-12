@@ -1,0 +1,12 @@
+<% content_for :title do %>
+View a member
+<% end %> 
+<h1>Member details</h1>
+Name: <%= @member.first_name+' '+@member.middle_name+' '+@member.last_name %><br/>
+Email: <%= @member.email %><br/>
+
+<br/>
+<%= link_to :Edit, {:action => 'edit', :id => @member.id} -%><br/>
+<%= link_to :Back, {:action => 'list'} %><br/>
+<br/>
+<%= link_to :Delete, {:action => 'delete', :id => @member.id} -%>
