@@ -2,6 +2,10 @@ class MemberController < ApplicationController
    def email
       @members = Member.find(:all, :conditions => ["deleted is NULL"])
    end
+   def search
+	  term = params[:term]
+	  @members = Member.find(:all, :conditions => ["first_name = "+term])
+   end
    def list
       @members = Member.find(:all, :conditions => ["deleted is NULL"])
    end
@@ -14,7 +18,8 @@ class MemberController < ApplicationController
    def create
       @member = Member.new(params[:member])
       if @member.save
-          redirect_to :action => 'list'
+		 flash[:notice] = "Successfully saved."
+		redirect_to :action => 'list'
       else
           render :action => 'new'
       end
@@ -25,6 +30,7 @@ class MemberController < ApplicationController
    def update
         @member = Member.find(params[:id])
       if @member.update_attributes(params[:member])
+		 flash[:notice] = "Successfully saved."
          redirect_to :action => 'show', :id => @member
       else
          render :action => 'edit'

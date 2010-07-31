@@ -2,6 +2,7 @@ ActionController::Routing::Routes.draw do |map|
 
 map.connect 'member/email', :controller => 'member', :action => 'email'
 map.connect 'member/list', :controller => 'member', :action => 'list'
+map.connect 'member/search', :controller => 'member', :action => 'search'
 map.connect 'member/new', :controller => 'member', :action => 'new'
 map.connect 'member/create', :controller => 'member', :action => 'create'
 map.connect 'member/show/:id', :controller => 'member', :action => 'show'

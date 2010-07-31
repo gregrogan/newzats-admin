@@ -3,10 +3,10 @@ Email members
 <% end %> 
 <h1>Email members</h1>
 <br/>
-
-<a href="mailto:?bcc=
-<%= 
-@members.each {|x| print x.email }
-
-%>
-">Email all members</a>
+<ol>
+<li>Right click in the box below and select "Select All"</li>
+<li>Right click and select "Copy"</li>
+<li>Paste into the BCC field of your email program
+</ol>
+<textarea rows="20" cols="40" readonly="true"><% @members.each do |member| %><% if member.email > "" %>&quot;<%= member.first_name %>&nbsp;<%= member.last_name %>&quot;&nbsp;&lt;<%= member.email %>&gt;,&nbsp;<% end %>
+<% end %></textarea>
