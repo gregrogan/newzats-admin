@@ -10,6 +10,13 @@ map.connect 'member/edit/:id', :controller => 'member', :action => 'edit'
 map.connect 'member/update/:id', :controller => 'member', :action => 'update'
 map.connect 'member/delete/:id', :controller => 'member', :action => 'delete'
 
+map.connect 'group/list', :controller => 'group', :action => 'list'
+map.connect 'group/show/:id', :controller => 'group', :action => 'show'
+map.connect 'group/new', :controller => 'group', :action => 'new'
+map.connect 'group/create', :controller => 'group', :action => 'create'
+map.connect 'group/delete/:id', :controller => 'group', :action => 'delete'
+
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

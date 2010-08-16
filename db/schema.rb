@@ -9,7 +9,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100608124654) do
+ActiveRecord::Schema.define(:version => 20100731132641) do
+
+  create_table "groups", :force => true do |t|
+    t.string "name"
+  end
+
+  create_table "groups_members", :force => true do |t|
+    t.integer "member_id"
+    t.string  "group_id"
+  end
 
   create_table "members", :force => true do |t|
     t.string   "first_name"
@@ -26,12 +35,8 @@ ActiveRecord::Schema.define(:version => 20100608124654) do
     t.string   "phone_mobile"
     t.string   "fax"
     t.integer  "region_id"
-    t.integer  "group_id"
     t.integer  "membership_type_id"
     t.date     "date_joined"
-    t.boolean  "council"
-    t.boolean  "admissions"
-    t.boolean  "leave"
     t.boolean  "deleted"
     t.datetime "created_at"
     t.datetime "updated_at"

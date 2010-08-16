@@ -18,6 +18,11 @@ Address: <br/>
 <% if @member.phone_mobile > "" %>Mobile phone: <%= @member.phone_mobile %><br/><% end %>
 <% if @member.fax > "" %>Fax: <%= @member.fax %><br/><% end %>
 <br/>
+Groups: <br/>
+<% @groups.each do |g| %>
+<%= g.name -%> <br />
+<% end %>
+<br />
 <%= link_to :Edit, {:action => 'edit', :id => @member.id} -%><br/>
 <%= link_to :Back, {:action => 'list'} %><br/>
 <br/>

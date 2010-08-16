@@ -1,0 +1,15 @@
+<% content_for :title do %>
+Groups list
+<% end %>
+<h1>Groups list</h1>
+<% if @groups.blank? %>
+<p>There are no groups currently in the system.</p>
+<% else %>
+<ul id="groups">
+<% @groups.each do |c| %>
+<li><%= link_to c.name, {:action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+
+<p><%= link_to "Add new group", {:action => 'new' }%></p>
