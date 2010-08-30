@@ -64,6 +64,7 @@ class MemberController < ApplicationController
    end
    def update
         @member = Member.find(params[:id])
+		@groups = Group.find(:all)
       if @member.update_attributes(params[:member])
 		 flash[:notice] = "Successfully saved."
          redirect_to :action => 'show', :id => @member

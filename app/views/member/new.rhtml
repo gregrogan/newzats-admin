@@ -1,62 +1,14 @@
 <% content_for :title do %>
 Add new member
 <% end %> 
+
+<%= error_messages_for :member %>
+
 <h1>Add new member</h1>
+
 <% form_for :member, @member, :url => { :action => :create } do |f| %>
-
-<p><label for="first_name">First Name</label>:
-<%= f.text_field :first_name %></p>
-
-<p><label for="middle_name">Middle Name</label>:
-<%= f.text_field :middle_name %></p>
-
-<p><label for="last_name">Last Name</label>:
-<%= f.text_field :last_name %></p>
-
-<p><label for="email">Email</label>:
-<%= f.text_field :email %></p>
-
-<p><label for="addr_1">Address line 1</label>:
-<%= f.text_field :addr_1 %></p>
-
-<p><label for="addr_2">Address line 2</label>:
-<%= f.text_field :addr_2 %></p>
-
-<p><label for="addr_3">Address line 3</label>:
-<%= f.text_field :addr_3 %></p>
-
-<p><label for="addr_4">Address line 4</label>:
-<%= f.text_field :addr_4 %></p>
-
-<p><label for="post_code">Post code</label>:
-<%= f.text_field :post_code %></p>
-
-<p><label for="phone_work">Work phone</label>:
-<%= f.text_field :phone_work %></p>
-
-<p><label for="phone_home">Home phone</label>:
-<%= f.text_field :phone_home %></p>
-
-<p><label for="phone_mobile">Mobile phone</label>:
-<%= f.text_field :phone_mobile %></p>
-
-<p><label for="fax">Fax</label>:
-<%= f.text_field :fax %></p>
-
-<p><label for="region">Region</label>:
-</p>
-
-<label for="groups">Groups</label>
-<% for group in @groups %>
-<div>
-	<%= hidden_field_tag "member[group_ids][]", "" %>
-    <%= check_box_tag "member[group_ids][]", 
-        group.id, @member.groups.include?(group) %>
-    <%= group.name %>
-</div>
-<% end %>
+<%= render :partial => "form", :locals => { :f => f } %>
 <br/>
-
 
 <%= submit_tag "Create" %>
 

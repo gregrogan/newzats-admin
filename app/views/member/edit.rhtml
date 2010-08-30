@@ -5,59 +5,9 @@ Edit a member
 <%= error_messages_for :member %>
 
 <h1>Edit a member</h1>
+
 <% form_for :member, @member, :url => { :action => :update } do |f| %>
-
-<label for="first_name">First Name/Company Name</label>
-<%= f.text_field :first_name %><br/>
-
-<label for="middle_name">Middle Name</label>
-<%= f.text_field :middle_name %><br/>
-
-<label for="last_name">Last Name</label>
-<%= f.text_field :last_name %><br/>
-
-<label for="email">Email</label>
-<%= f.text_field :email %><br/>
-<br/>
-<label for="addr_1">Address line 1</label>
-<%= f.text_field :addr_1 %><br/>
-
-<label for="addr_2">Address line 2</label>
-<%= f.text_field :addr_2 %><br/>
-
-<label for="addr_3">Address line 3</label>
-<%= f.text_field :addr_3 %><br/>
-
-<label for="addr_4">Address line 4</label>
-<%= f.text_field :addr_4 %><br/>
-
-<label for="post_code">Post code</label>
-<%= f.text_field :post_code %><br/>
-<br/>
-<label for="phone_work">Work phone</label>
-<%= f.text_field :phone_work %><br/>
-
-<label for="phone_home">Home phone</label>
-<%= f.text_field :phone_home %><br/>
-
-<label for="phone_mobile">Mobile phone</label>
-<%= f.text_field :phone_mobile %><br/>
-
-<label for="fax">Fax</label>
-<%= f.text_field :fax %><br/>
-<br/>
-<label for="region">Region</label>
-<br/>
-
-<label for="groups">Groups</label>
-<% for group in @groups %>
-<div>
-	<%= hidden_field_tag "member[group_ids][]", "" %>
-    <%= check_box_tag "member[group_ids][]", 
-        group.id, @member.groups.include?(group) %>
-    <%= group.name %>
-</div>
-<% end %>
+<%= render :partial => "form", :locals => { :f => f } %>
 <br/>
 
 <%= submit_tag "Update" %>
