@@ -38,10 +38,12 @@ class MemberController < ApplicationController
    end
    def show
       @member = Member.find(params[:id])
-	  @groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
-	  @groups = Array.new
-	  @groups_member.each do |gm|
-		@groups << Group.find(gm.group_id)
+	  if !(@member.deleted)
+		  @groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
+		  @groups = Array.new
+		  @groups_member.each do |gm|
+			@groups << Group.find(gm.group_id)
+		  end
 	  end
    end
    def new

@@ -7,7 +7,10 @@ class GroupController < ApplicationController
 	  @groups_member = GroupsMember.find(:all, :conditions => { :group_id => @group.id })
 	  @members = Array.new
 	  @groups_member.each do |gm|
-		@members << Member.find(gm.member_id)
+		@member = Member.find(gm.member_id)
+	    if !(@member.deleted)
+			@members << @member
+		end
 	  end
    end
    def new
@@ -27,8 +30,9 @@ class GroupController < ApplicationController
 	  @linked_members = Array.new
 
 	  GroupsMember.find(:all).each do |gm|
-		  if ((Integer(group.id) - Integer(gm.group_id)) == 0)
-		   @linked_members << "#{Member.find(gm.member_id).first_name} #{Member.find(gm.member_id).last_name}"
+	      @member = Member.find(gm.member_id)
+		  if ( ((Integer(group.id) - Integer(gm.group_id)) == 0) && !(@member.deleted) )
+		   @linked_members << "#{@member.first_name} #{@member.last_name}"
 		  end
 	  end
 	  if (@linked_members.length > 0)

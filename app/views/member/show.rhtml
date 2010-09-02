@@ -20,10 +20,9 @@ Address: <br/>
 <br/>
 Groups: <br/>
 <% @groups.each do |g| %>
-<%= g.name -%> <br />
+<%= link_to g.name, {:controller => 'group', :action => 'show', :id => g.id} -%><br />
 <% end %>
 <br />
 <%= link_to :Edit, {:action => 'edit', :id => @member.id} -%><br/>
-<%= link_to :Back, {:action => 'list'} %><br/>
 <br/>
-<%= link_to :Delete, {:action => 'delete', :id => @member.id} -%>
+<%= link_to :Delete, {:action => 'delete', :id => @member.id}, :confirm => "Are you sure you wish to delete #{@member.first_name+' '+@member.middle_name+' '+@member.last_name}?" -%>

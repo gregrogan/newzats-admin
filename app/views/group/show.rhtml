@@ -12,9 +12,9 @@ This group contains the following members:<br/>
 <% end %>
 </ul>
 <% end %>
-
-<%= link_to :Back, {:action => 'list'} %><br/>
-
+<br/>
 <% if @members.blank? %>
 <%= link_to :Delete, {:action => 'delete', :id => @group.id} -%>
+<% else %>
+Note: This group can only be deleted if associated members are removed
 <% end %>
