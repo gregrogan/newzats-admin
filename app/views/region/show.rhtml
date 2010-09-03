@@ -1,9 +1,9 @@
 <% content_for :title do %>
-View group
+View region
 <% end %> 
-<h1><%= @group.name %></h1>
+<h1><%= @region.name %></h1>
 <% if @members.blank? %>
-<p>No members currently in this group.</p>
+<p>No members currently in this region.</p>
 <% else %>
 Members:<br/>
 <ul id="members">
@@ -14,7 +14,7 @@ Members:<br/>
 <% end %>
 <br/>
 <% if @members.blank? %>
-<%= link_to :Delete, {:action => 'delete', :id => @group.id} -%>
+<%= link_to :Delete, {:action => 'delete', :id => @region.id} -%>
 <% else %>
-Note: This group can only be deleted if associated members are removed
+Note: This region can only be deleted if associated members are removed
 <% end %>

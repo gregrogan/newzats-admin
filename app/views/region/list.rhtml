@@ -1,0 +1,14 @@
+<% content_for :title do %>
+Regions list
+<% end %>
+<% if @regions.blank? %>
+<p>There are no regionss currently in the system.</p>
+<% else %>
+<ul id="regions">
+<% @regions.each do |c| %>
+<li><%= link_to c.name, {:action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+
+<p><%= link_to "Add new region", {:action => 'new' }%></p>

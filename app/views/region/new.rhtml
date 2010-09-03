@@ -1,0 +1,11 @@
+<% content_for :title do %>
+Add region
+<% end %> 
+<% form_for :region, @region, :url => { :action => :create } do |f| %>
+
+<p><label for="region_name">Region Name</label>
+<%= f.text_field :name %></p>
+
+<%= submit_tag "Create" %>
+
+<% end -%>

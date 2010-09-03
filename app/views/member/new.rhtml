@@ -1,10 +1,8 @@
 <% content_for :title do %>
-Add new member
+Add member
 <% end %> 
 
 <%= error_messages_for :member %>
-
-<h1>Add new member</h1>
 
 <% form_for :member, @member, :url => { :action => :create } do |f| %>
 <%= render :partial => "form", :locals => { :f => f } %>

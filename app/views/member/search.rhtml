@@ -1,7 +1,6 @@
 <% content_for :title do %>
-Search for members
+Search results
 <% end %>
-<h1>Search results</h1>
 <br/>
 <% @members.each do |c| %>
 <li><%= link_to "#{c.first_name+' '+c.last_name}", {:action => 'show', :id => c.id} -%></li>

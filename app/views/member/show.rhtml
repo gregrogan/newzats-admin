@@ -1,7 +1,6 @@
 <% content_for :title do %>
-View a member
-<% end %> 
-<h1>Member details</h1>
+Member details
+<% end %>
 Name: <%= @member.first_name+' '+@member.middle_name+' '+@member.last_name %><br/>
 <% if @member.email > "" %>
 Email: <a href="mailto:<%= @member.email %>"><%= @member.email %></a><br/>

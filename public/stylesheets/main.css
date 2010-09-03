@@ -9,7 +9,7 @@ color: #333;
 }
 
 h1 {
-font-size: 28px;
+font-size: 20px;
 color: #000;
 }
 
@@ -70,7 +70,6 @@ padding-right: 30px;
 #header {
 background-repeat: no-repeat;
 background-position: top left;
-height: 64px;
 }
 #header h1, #header h2 {margin: 0}
 #header h2 {

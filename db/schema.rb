@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100731132641) do
+ActiveRecord::Schema.define(:version => 20100903230521) do
 
   create_table "groups", :force => true do |t|
     t.string "name"
@@ -38,6 +38,12 @@ ActiveRecord::Schema.define(:version => 20100731132641) do
     t.integer  "membership_type_id"
     t.date     "date_joined"
     t.boolean  "deleted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "regions", :force => true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
