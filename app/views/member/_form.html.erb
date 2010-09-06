@@ -40,12 +40,12 @@
 <label for="region">Region</label>
 <br/>
 
-<label for="groups">Groups</label><br/>
+<label for="groups">Groups</label>
 <% for group in @groups %>
-<div>
-	<%= hidden_field_tag "member[group_ids][]", "" %>
-    <%= check_box_tag "member[group_ids][]", 
-        group.id, @member.groups.include?(group) %>
-    <%= group.name %>
-</div>
+	<div id="select-group">
+		<%= hidden_field_tag "member[group_ids][]", "" %>
+		<%= check_box_tag "member[group_ids][]", 
+			group.id, @member.groups.include?(group) %>
+		<%= group.name %>
+	</div>
 <% end %>

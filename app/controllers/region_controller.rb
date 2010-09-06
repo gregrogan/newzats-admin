@@ -6,7 +6,7 @@ class RegionController < ApplicationController
 	  @region = Region.find(params[:id])
 	  @region_members = Member.find(:all, :conditions => { :region_id => @region.id })
 	  @members = Array.new
-	  @region_member.each do |rm|
+	  @region_members.each do |rm|
 	    if !(rm.deleted)
 			@members << rm
 		end
@@ -30,7 +30,7 @@ class RegionController < ApplicationController
 
 	  @region_members = Member.find(:all, :conditions => { :region_id => @region.id })
 	  @members = Array.new
-	  @region_member.each do |rm|
+	  @region_members.each do |rm|
 	    if !(rm.deleted)
 			@linked_members << rm
 		end
@@ -39,8 +39,8 @@ class RegionController < ApplicationController
 	  if (@linked_members.length > 0)
 	     flash[:notice] = "Can't delete this region because it contains these members! #{@linked_members.join(', ')}"
       else
-		region.destroy
-        flash[:notice] = "Region #{region.name} deleted"
+		@region.destroy
+        flash[:notice] = "Region #{@region.name} deleted"
       end
       redirect_to :action => 'list'
 

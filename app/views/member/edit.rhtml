@@ -7,7 +7,8 @@ Edit member
 <% form_for :member, @member, :url => { :action => :update } do |f| %>
 <%= render :partial => "form", :locals => { :f => f } %>
 <br/>
-
+<br/>
+<div id="commit">
 <%= submit_tag "Update" %>
-
+</div>
 <% end -%>

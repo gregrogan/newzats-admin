@@ -16,6 +16,12 @@ map.connect 'group/new', :controller => 'group', :action => 'new'
 map.connect 'group/create', :controller => 'group', :action => 'create'
 map.connect 'group/delete/:id', :controller => 'group', :action => 'delete'
 
+map.connect 'region/list', :controller => 'region', :action => 'list'
+map.connect 'region/show/:id', :controller => 'region', :action => 'show'
+map.connect 'region/new', :controller => 'region', :action => 'new'
+map.connect 'region/create', :controller => 'region', :action => 'create'
+map.connect 'region/delete/:id', :controller => 'region', :action => 'delete'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
 

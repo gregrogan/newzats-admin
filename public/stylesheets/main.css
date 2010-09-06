@@ -23,7 +23,19 @@ text-decoration: none;
 form label {
 width: 200px;
 float: left;
+text-align: right;
+margin-right: 10px;
 }
+
+#errorExplanation  h2{
+font-size: 13px;
+color:red;
+}
+
+#errorExplanation  ul li{
+color:red;
+}
+
 
 form div.fieldWithErrors {
 display: inline;
@@ -32,6 +44,18 @@ display: inline;
 form div.fieldWithErrors input{
 background-color: red;
 color: white;
+}
+
+#select-group {
+clear:right;
+float:right;
+width:290px;
+}
+
+#commit {
+text-align:center;
+clear:right;
+padding-top:20px;
 }
 
 #page {
