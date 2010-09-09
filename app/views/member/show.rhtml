@@ -16,6 +16,8 @@ Address: <br/>
 <% if @member.phone_home > "" %>Home phone: <%= @member.phone_home %><br/><% end %>
 <% if @member.phone_mobile > "" %>Mobile phone: <%= @member.phone_mobile %><br/><% end %>
 <% if @member.fax > "" %>Fax: <%= @member.fax %><br/><% end %>
+<% if @member.region_id %>Region: <%= Region.find(@member.region_id).name %><br/><% end %>
+<% if @member.membershiptype_id %>Membership type: <%= Membershiptype.find(@member.membershiptype_id).name %><br/><% end %>
 <br/>
 Groups: <br/>
 <% @groups.each do |g| %>

@@ -1,0 +1,14 @@
+<% content_for :title do %>
+Membership type list
+<% end %>
+<% if @membershiptypes.blank? %>
+<p>There are no membership types currently in the system.</p>
+<% else %>
+<ul id="membershiptypes">
+<% @membershiptypes.each do |c| %>
+<li><%= link_to c.name, {:action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+
+<p><%= link_to "Add new membership type", {:action => 'new' }%></p>

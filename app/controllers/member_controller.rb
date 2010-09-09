@@ -49,10 +49,11 @@ class MemberController < ApplicationController
    def new
       @member = Member.new
 	  @groups = Group.find(:all)
+	  @regions = Region.find(:all)
+	  @membershiptypes = Membershiptype.find(:all)
    end
    def create
       @member = Member.new(params[:member])
-	  @groups = Group.find(:all)
       if @member.save
 		 flash[:notice] = "Successfully saved."
 		redirect_to :action => 'list'
@@ -63,10 +64,20 @@ class MemberController < ApplicationController
    def edit
       @member = Member.find(params[:id])
 	  @groups = Group.find(:all)
+	  @regions = Region.find(:all)
+	  @membershiptypes = Membershiptype.find(:all)
+	  @selected_region
+	  if @member.region_id
+		@selected_region = Region.find(@member.region_id)
+	  end
+	  @selected_membershiptype
+	  if @member.membershiptype_id
+		@selected_membershiptype = Membershiptype.find(@member.membershiptype_id)
+	  end
+
    end
    def update
         @member = Member.find(params[:id])
-		@groups = Group.find(:all)
       if @member.update_attributes(params[:member])
 		 flash[:notice] = "Successfully saved."
          redirect_to :action => 'show', :id => @member

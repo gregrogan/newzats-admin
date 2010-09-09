@@ -38,7 +38,10 @@
 <%= f.text_field :fax %><br/>
 
 <label for="region">Region</label>
-<br/>
+<%= collection_select :member, :region_id, @regions, :id, :name, options ={:include_blank => :true } %><br/>
+
+<label for="membershiptype">Membership type</label>
+<%= collection_select :member, :membershiptype_id, @membershiptypes, :id, :name, options ={:include_blank => true} %><br/>
 
 <label for="groups">Groups</label>
 <% for group in @groups %>

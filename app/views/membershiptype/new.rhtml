@@ -1,0 +1,13 @@
+<% content_for :title do %>
+Add membership type
+<% end %> 
+<% form_for :membershiptype, @membershiptype, :url => { :action => :create } do |f| %>
+
+<p><label for="membership_type_name">Membership type</label>
+<%= f.text_field :name %></p>
+
+<div id="commit">
+<%= submit_tag "Create" %>
+</div>
+
+<% end -%>

@@ -1,0 +1,20 @@
+<% content_for :title do %>
+View membership type
+<% end %> 
+<h1><%= @membershiptype.name %></h1>
+<% if @members.blank? %>
+<p>No members currently in this membershiptype.</p>
+<% else %>
+Members:<br/>
+<ul id="members">
+<% @members.each do |c| %>
+<li><%= link_to "#{c.first_name+' '+c.last_name}", {:controller => 'member', :action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+<br/>
+<% if @members.blank? %>
+<%= link_to :Delete, {:action => 'delete', :id => @membershiptype.id} -%>
+<% else %>
+Note: This membershiptype can only be deleted if associated members are removed
+<% end %>

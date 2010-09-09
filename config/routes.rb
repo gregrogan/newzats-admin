@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
 
+map.root :controller => "member", :action => 'list'
+
 map.connect 'member/email', :controller => 'member', :action => 'email'
 map.connect 'member/list', :controller => 'member', :action => 'list'
 map.connect 'member/search', :controller => 'member', :action => 'search'
@@ -22,6 +24,11 @@ map.connect 'region/new', :controller => 'region', :action => 'new'
 map.connect 'region/create', :controller => 'region', :action => 'create'
 map.connect 'region/delete/:id', :controller => 'region', :action => 'delete'
 
+map.connect 'membershiptype/list', :controller => 'membershiptype', :action => 'list'
+map.connect 'membershiptype/show/:id', :controller => 'membershiptype', :action => 'show'
+map.connect 'membershiptype/new', :controller => 'membershiptype', :action => 'new'
+map.connect 'membershiptype/create', :controller => 'membershiptype', :action => 'create'
+map.connect 'membershiptype/delete/:id', :controller => 'membershiptype', :action => 'delete'
 
   # The priority is based upon order of creation: first created -> highest priority.
 
