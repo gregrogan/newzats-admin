@@ -4,7 +4,7 @@ margin-bottom: 25px;
 padding: 0;
 background-color: #f0f0f0;
 font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
-font-size: 13px;
+font-size: 14px;
 color: #333;
 }
 
@@ -203,4 +203,8 @@ list-style-type: none;
 }
 #sidebar ul.links li {
 margin-bottom: 5px;
+}
+
+p.create_update_times{
+font-size: 12px;
 }

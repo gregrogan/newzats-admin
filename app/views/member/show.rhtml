@@ -3,27 +3,50 @@ Member details
 <% end %>
 Name: <%= @member.first_name+' '+@member.middle_name+' '+@member.last_name %><br/>
 <% if @member.email > "" %>
-Email: <a href="mailto:<%= @member.email %>"><%= @member.email %></a><br/>
+Email: 
+<% if @email_display == 'valid' %>
+<a href="mailto:<%= @member.email %>"><%= @member.email %></a><br/>
 <% end %>
-Address: <br/>
+<% if @email_display == 'invalid' %>
+<span style="color:red;text-decoration:line-through"><%= @member.email %></span> (INVALID)<br/>
+<% end %>
+<% end %>
+
+<% if @has_any_address == 'true' %>
+<br/>Address: <br/>
 <% if @member.addr_1 > "" %><%= @member.addr_1 %><br/><% end %>
 <% if @member.addr_2 > "" %><%= @member.addr_2 %><br/><% end %>
 <% if @member.addr_3 > "" %><%= @member.addr_3 %><br/><% end %>
 <% if @member.addr_4 > "" %><%= @member.addr_4 %><br/><% end %>
 <% if @member.post_code > "" %><%= @member.post_code %><br/><% end %>
+<% end %>
+
+<% if @has_any_phone == 'true' %>
 <br/>
 <% if @member.phone_work > "" %>Work phone: <%= @member.phone_work %><br/><% end %>
 <% if @member.phone_home > "" %>Home phone: <%= @member.phone_home %><br/><% end %>
 <% if @member.phone_mobile > "" %>Mobile phone: <%= @member.phone_mobile %><br/><% end %>
 <% if @member.fax > "" %>Fax: <%= @member.fax %><br/><% end %>
-<% if @member.region_id %>Region: <%= Region.find(@member.region_id).name %><br/><% end %>
-<% if @member.membershiptype_id %>Membership type: <%= Membershiptype.find(@member.membershiptype_id).name %><br/><% end %>
+<% end %>
+
+<% if @member.region_id %><br/>Region: <%= Region.find(@member.region_id).name %><br/><% end %>
+
+<br/>
+Membership type: <%= Membershiptype.find(@member.membershiptype_id).name %><br/>
+
 <br/>
 Groups: <br/>
 <% @groups.each do |g| %>
 <%= link_to g.name, {:controller => 'group', :action => 'show', :id => g.id} -%><br />
 <% end %>
-<br />
+
+<p class="create_update_times">
+details last updated: <%= @member.updated_at.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
+date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
+</p>
+
+<%= link_to :Notes, {:action => 'notes', :id => @member.id} -%><br/>
+<br/>
 <%= link_to :Edit, {:action => 'edit', :id => @member.id} -%><br/>
 <br/>
-<%= link_to :Delete, {:action => 'delete', :id => @member.id}, :confirm => "Are you sure you wish to delete #{@member.first_name+' '+@member.middle_name+' '+@member.last_name}?" -%>
+<%= link_to :Delete, {:action => 'delete', :id => @member.id}, :confirm => "Are you sure you wish to delete member #{@member.first_name+' '+@member.last_name}?" -%>

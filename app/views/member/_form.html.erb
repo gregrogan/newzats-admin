@@ -7,9 +7,14 @@
 <label for="last_name">Last Name</label>
 <%= f.text_field :last_name %><br/>
 
+<br/>
 <label for="email">Email</label>
 <%= f.text_field :email %><br/>
 
+<label for="email_invalid">Email address invalid?</label>
+<%= f.check_box :email_invalid %><br/>
+
+<br/>
 <label for="addr_1">Address line 1</label>
 <%= f.text_field :addr_1 %><br/>
 
@@ -25,6 +30,7 @@
 <label for="post_code">Post code</label>
 <%= f.text_field :post_code %><br/>
 
+<br/>
 <label for="phone_work">Work phone</label>
 <%= f.text_field :phone_work %><br/>
 
@@ -37,12 +43,15 @@
 <label for="fax">Fax</label>
 <%= f.text_field :fax %><br/>
 
+<br/>
 <label for="region">Region</label>
 <%= collection_select :member, :region_id, @regions, :id, :name, options ={:include_blank => :true } %><br/>
 
+<br/>
 <label for="membershiptype">Membership type</label>
-<%= collection_select :member, :membershiptype_id, @membershiptypes, :id, :name, options ={:include_blank => true} %><br/>
+<%= collection_select :member, :membershiptype_id, @membershiptypes, :id, :name %><br/>
 
+<br/>
 <label for="groups">Groups</label>
 <% for group in @groups %>
 	<div id="select-group">

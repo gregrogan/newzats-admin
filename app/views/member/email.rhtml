@@ -6,5 +6,5 @@ Email members
 <li>Right click and select "Copy"</li>
 <li>Paste into the BCC field of your email program
 </ol>
-<textarea rows="20" cols="40" readonly="true"><% @members.each do |member| %><% if member.email > "" %>&quot;<%= member.first_name %>&nbsp;<%= member.last_name %>&quot;&nbsp;&lt;<%= member.email %>&gt;,&nbsp;<% end %>
+<textarea rows="20" cols="40" readonly="true"><% @members.each do |member| %>&quot;<%= member.first_name %>&nbsp;<%= member.last_name %>&quot;&nbsp;&lt;<%= member.email %>&gt;,&nbsp;
 <% end %></textarea>

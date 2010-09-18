@@ -4,6 +4,7 @@ class Member < ActiveRecord::Base
   belongs_to :membership_type
   belongs_to :region
   validates_presence_of :first_name
+  validates_presence_of :membershiptype_id
   
   validates_format_of :email,
     :allow_blank => :true,

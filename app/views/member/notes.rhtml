@@ -1,0 +1,10 @@
+<% content_for :title do %>
+Notes for member
+<% end %> 
+
+<% @notes.each do |note| %>
+on <%= note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
+<%= note.content %>
+<br/>
+<br/>
+<% end %>
