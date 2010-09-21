@@ -81,7 +81,7 @@ class MemberController < ApplicationController
 	  @regions = Region.find(:all)
 	  @membershiptypes = Membershiptype.find(:all)
 
-      if @member.save
+      if @member.save!
 	      @note = Note.new
 		  @note.member_id = @member.id
 		  @note.content = note_created_with(:member => @member)
@@ -110,10 +110,11 @@ class MemberController < ApplicationController
    def update
       @member = Member.find(params[:id])
 	  @orig_member = Member.find(params[:id])
+	  @orig_groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
       if @member.update_attributes(params[:member])
 		  @note = Note.new
 		  @note.member_id = @member.id
-		  @note.content = note_what_has_changed(:orig_member => @orig_member, :member => @member)
+		  @note.content = note_what_has_changed(:orig_member => @orig_member, :member => @member, :orig_groups_member => @orig_groups_member)
 		  @note.modification_time = Time.now
 		  @note.save
 		  
@@ -137,97 +138,174 @@ class MemberController < ApplicationController
    def note_what_has_changed(args)
     @orig_member = args[:orig_member]
 	@member = args[:member]
-	@changes = 'member details changed:<br/>'
-	if @orig_member.first_name != @member.first_name
-		@changes.concat("- first name from #{@orig_member.first_name} to #{@member.first_name}<br/>")
-	end
-	if @orig_member.middle_name != @member.middle_name
-		@changes.concat("- middle name from #{@orig_member.middle_name} to #{@member.middle_name}<br/>")
-	end
-	if @orig_member.last_name != @member.last_name
-		@changes.concat("- last name from #{@orig_member.last_name} to #{@member.last_name}<br/>")
-	end
-	if @orig_member.email != @member.email
-		@changes.concat("- email from #{@orig_member.email} to #{@member.email}<br/>")
-	end
+	@orig_groups_member = args[:orig_groups_member]
+	@change
+	@changes = ''
+	
+	@change = add_rem_change(:orig => @orig_member.first_name, :new => @member.first_name, :field_name => 'First Name')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.middle_name, :new => @member.middle_name, :field_name => 'Middle Name')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.last_name, :new => @member.last_name, :field_name => 'Last Name')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.email, :new => @member.email, :field_name => 'Email')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
 	if @orig_member.email_invalid != @member.email_invalid
-		@changes.concat("- email address invalid from #{@orig_member.email_invalid} to #{@member.email_invalid}<br/>")
+		@changes.concat("- Email address invalid changed from #{@orig_member.email_invalid} to #{@member.email_invalid}<br/>")
 	end
-	if @orig_member.addr_1 != @member.addr_1
-		@changes.concat("- Address line 1 from #{@orig_member.addr_1} to #{@member.addr_1}<br/>")
+	
+	@change = add_rem_change(:orig => @orig_member.addr_1, :new => @member.addr_1, :field_name => 'Address line 1')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.addr_2, :new => @member.addr_2, :field_name => 'Address line 2')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.addr_3, :new => @member.addr_3, :field_name => 'Address line 3')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.addr_4, :new => @member.addr_4, :field_name => 'Address line 4')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.post_code, :new => @member.post_code, :field_name => 'Post code')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.phone_work, :new => @member.phone_work, :field_name => 'Work phone')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.phone_home, :new => @member.phone_home, :field_name => 'Home phone')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.phone_mobile, :new => @member.phone_mobile, :field_name => 'Mobile phone')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.fax, :new => @member.fax, :field_name => 'Fax')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	if @orig_member.region_id
+		@orig_val = Region.find(@orig_member.region_id).name
+	else
+		@orig_val = ''
 	end
-	if @orig_member.addr_2 != @member.addr_2
-		@changes.concat("- Address line 2 from #{@orig_member.addr_2} to #{@member.addr_2}<br/>")
+	if @member.region_id
+		@new_val = Region.find(@member.region_id).name
+	else
+		@new_val = ''
 	end
-	if @orig_member.addr_3 != @member.addr_3
-		@changes.concat("- Address line 3 from #{@orig_member.addr_3} to #{@member.addr_3}<br/>")
+	@change = add_rem_change(:orig => @orig_val, :new => @new_val, :field_name => 'Region')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	if @orig_member.membershiptype_id
+		@orig_val = Membershiptype.find(@orig_member.membershiptype_id).name
+	else
+		@orig_val = ''
 	end
-	if @orig_member.addr_4 != @member.addr_4
-		@changes.concat("- Address line 4 from #{@orig_member.addr_4} to #{@member.addr_4}<br/>")
+	if @member.membershiptype_id
+		@new_val = Membershiptype.find(@member.membershiptype_id).name
+	else
+		@new_val = ''
 	end
-	if @orig_member.post_code != @member.post_code
-		@changes.concat("- Post code from #{@orig_member.post_code} to #{@member.post_code}<br/>")
+	@change = add_rem_change(:orig => @orig_val, :new => @new_val, :field_name => 'Membership type')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@orig_groups_member.each do |gm|
+		@groups_orig << Group.find(gm.group_id).name
 	end
-	if @orig_member.phone_work != @member.phone_work
-		@changes.concat("- Work phone from #{@orig_member.phone_work} to #{@member.phone_work}<br/>")
+	puts("groups orig...")
+	puts(@groups_orig.join(','))
+	@groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
+	@groups_new = Array.new
+	@groups_member.each do |gm|
+		@groups_new << Group.find(gm.group_id).name
 	end
-	if @orig_member.phone_home != @member.phone_home
-		@changes.concat("- Home phone from #{@orig_member.phone_home} to #{@member.phone_home}<br/>")
+	puts("groups new...")
+	puts(@groups_new.join(','))
+
+	
+	@removed_groups
+	@groups_orig.each do |gm|
+		if !@groups_new.include?(gm)
+			@removed_groups << gm
+		end
 	end
-	if @orig_member.phone_mobile != @member.phone_mobile
-		@changes.concat("- Mobile phone from #{@orig_member.phone_mobile} to #{@member.phone_mobile}<br/>")
+	if @removed_groups
+		@changes.concat("- removed groups #{@removed_groups.join(',')}")
 	end
-	if @orig_member.fax != @member.fax
-		@changes.concat("- Fax from #{@orig_member.fax} to #{@member.fax}<br/>")
+	@added_groups
+	@groups_new.each do |gm|
+		if !@groups_orig.include?(gm)
+			@added_groups << gm
+		end
+	end
+	if @added_groups
+		@changes.concat("- added groups #{@added_groups.join(',')}")
 	end
 
 	return @changes
    end
+   
+   def add_rem_change(args)
+	@orig = args[:orig]
+	@new = args[:new]
+	@field_name = args[:field_name]
+	if @orig != @new
+		if @orig == '' && @new > ''
+			return "added #{@field_name} #{@new}"
+		elsif @orig > '' && @new == ''
+			return "removed #{@field_name} (was #{@orig})"
+		else
+			return "#{@field_name} changed from #{@orig} to #{@new}"
+		end
+	else
+		return ''
+	end
+   end
 
    def note_created_with(args)
 	@member = args[:member]
-	@creates = 'member created with:<br/>'
-	if @member.first_name
+	@creates = ''
+	if @member.first_name > ''
 		@creates.concat("- first name is #{@member.first_name}<br/>")
 	end
-	if @member.middle_name
+	if @member.middle_name > ''
 		@creates.concat("- middle name is #{@member.middle_name}<br/>")
 	end
-	if member.last_name
+	if @member.last_name > ''
 		@creates.concat("- last name is #{@member.last_name}<br/>")
 	end
-	if @member.email
+	if @member.email > ''
 		@creates.concat("- email is #{@member.email}<br/>")
 	end
-	if @member.email_invalid
-		@creates.concat("- email address is #{@member.email_invalid}<br/>")
-	end
-	if @member.addr_1
+	@creates.concat("- email address is #{@member.email_invalid}<br/>")
+	if @member.addr_1 > ''
 		@creates.concat("- Address line 1 is #{@member.addr_1}<br/>")
 	end
-	if @member.addr_2
+	if @member.addr_2 > ''
 		@creates.concat("- Address line 2 is #{@member.addr_2}<br/>")
 	end
-	if @member.addr_3
+	if @member.addr_3 > ''
 		@creates.concat("- Address line 3 is #{@member.addr_3}<br/>")
 	end
-	if @member.addr_4
+	if @member.addr_4 > ''
 		@creates.concat("- Address line 4 is #{@member.addr_4}<br/>")
 	end
 	if @member.post_code
-		@creates.concat("- Post code is to #{@member.post_code}<br/>")
+		@creates.concat("- Post code is #{@member.post_code}<br/>")
 	end
-	if @member.phone_work
-		@creates.concat("- Work phone changed is #{@member.phone_work}<br/>")
+	if @member.phone_work > ''
+		@creates.concat("- Work phone is #{@member.phone_work}<br/>")
 	end
-	if @member.phone_home
+	if @member.phone_home > ''
 		@creates.concat("- Home phone is #{@member.phone_home}<br/>")
 	end
-	if @member.phone_mobile
+	if @member.phone_mobile > ''
 		@creates.concat("- Mobile phone is #{@member.phone_mobile}<br/>")
 	end
-	if @member.fax
-		@creates.concat("- Fax changed is #{@member.fax}<br/>")
+	if @member.fax > ''
+		@creates.concat("- Fax is #{@member.fax}<br/>")
 	end
 	return @creates
    end
