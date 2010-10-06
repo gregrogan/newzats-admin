@@ -211,37 +211,35 @@ class MemberController < ApplicationController
 	@change = add_rem_change(:orig => @orig_val, :new => @new_val, :field_name => 'Membership type')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
+	@groups_orig = Array.new
 	@orig_groups_member.each do |gm|
 		@groups_orig << Group.find(gm.group_id).name
 	end
-	puts("groups orig...")
-	puts(@groups_orig.join(','))
+	
 	@groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
 	@groups_new = Array.new
 	@groups_member.each do |gm|
 		@groups_new << Group.find(gm.group_id).name
 	end
-	puts("groups new...")
-	puts(@groups_new.join(','))
-
 	
-	@removed_groups
+	@removed_groups = Array.new
 	@groups_orig.each do |gm|
 		if !@groups_new.include?(gm)
 			@removed_groups << gm
 		end
 	end
-	if @removed_groups
-		@changes.concat("- removed groups #{@removed_groups.join(',')}")
+	if (@removed_groups.length > 0)
+		@changes.concat("- removed from groups #{@removed_groups.join(', ')}<br/>")
 	end
-	@added_groups
+	
+	@added_groups = Array.new
 	@groups_new.each do |gm|
 		if !@groups_orig.include?(gm)
 			@added_groups << gm
 		end
 	end
-	if @added_groups
-		@changes.concat("- added groups #{@added_groups.join(',')}")
+	if (@added_groups.length > 0)
+		@changes.concat("- added to groups #{@added_groups.join(', ')}<br/>")
 	end
 
 	return @changes
@@ -279,7 +277,7 @@ class MemberController < ApplicationController
 	if @member.email > ''
 		@creates.concat("- email is #{@member.email}<br/>")
 	end
-	@creates.concat("- email address is #{@member.email_invalid}<br/>")
+	@creates.concat("- email address invalid is #{@member.email_invalid}<br/>")
 	if @member.addr_1 > ''
 		@creates.concat("- Address line 1 is #{@member.addr_1}<br/>")
 	end
@@ -292,7 +290,7 @@ class MemberController < ApplicationController
 	if @member.addr_4 > ''
 		@creates.concat("- Address line 4 is #{@member.addr_4}<br/>")
 	end
-	if @member.post_code
+	if @member.post_code > ''
 		@creates.concat("- Post code is #{@member.post_code}<br/>")
 	end
 	if @member.phone_work > ''
@@ -307,6 +305,23 @@ class MemberController < ApplicationController
 	if @member.fax > ''
 		@creates.concat("- Fax is #{@member.fax}<br/>")
 	end
+	if @member.region_id
+		@creates.concat("- Region is #{Region.find(@member.region_id).name}<br/>")
+	end
+	if @member.membershiptype_id
+		@creates.concat("- Membership type is #{Membershiptype.find(@member.membershiptype_id).name}<br/>")
+	end
+	
+	@groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
+	@groups = Array.new
+	@groups_member.each do |gm|
+	puts(gm.group_id)
+		@groups << Group.find(gm.group_id).name
+	end
+	if (@groups.length > 0)
+		@creates.concat("- Groups added to are #{@groups.join(', ')}<br/>")
+	end
+	
 	return @creates
    end
 end
