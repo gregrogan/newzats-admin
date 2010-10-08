@@ -2,4 +2,22 @@ class Group < ActiveRecord::Base
   has_many :groups_members
   has_many :members, :through => :groups_members
   validates_presence_of :name
+  
+    attr_accessor :member_ids
+  after_save :update_members
+
+  #after_save callback to handle group_ids
+  def update_members
+    unless member_ids.nil?
+      self.groups_members.each do |m|
+        m.destroy unless member_ids.include?(m.member_id.to_s)
+        member_ids.delete(m.member_id.to_s)
+      end
+      member_ids.each do |m|
+        self.groups_members.create(:member_id => m) unless m.blank?
+      end
+      reload
+      self.member_ids = nil
+    end
+  end
 end

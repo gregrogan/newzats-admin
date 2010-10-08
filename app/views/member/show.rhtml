@@ -45,8 +45,15 @@ details last updated: <%= @member.updated_at.in_time_zone("Auckland").strftime("
 date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
 </p>
 
-<%= link_to :Notes, {:action => 'notes', :id => @member.id} -%><br/>
+<% form_for :note, @note, :url => { :action => :create_note, :id => @member.id } do |f| %>
+<%= f.text_area :content, :cols => 40, :rows => 4 %><br/>
+<%= submit_tag "Add note" %>
+<% end -%>
+
 <br/>
+<%= link_to 'View notes', {:action => 'notes', :id => @member.id} -%><br/>
+<br/>
+
 <%= link_to :Edit, {:action => 'edit', :id => @member.id} -%><br/>
 <br/>
 <%= link_to :Delete, {:action => 'delete', :id => @member.id}, :confirm => "Are you sure you wish to delete member #{@member.first_name+' '+@member.last_name}?" -%>

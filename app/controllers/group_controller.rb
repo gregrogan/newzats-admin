@@ -44,4 +44,13 @@ class GroupController < ApplicationController
       redirect_to :action => 'list'
 
    end
+   def members
+    @group = Group.find(params[:id])
+	@members = Member.find(:all, :conditions => ["deleted is NULL"])
+   end
+   def update_members
+    @group = Group.find(params[:id])
+	@group.save
+    redirect_to :action => 'show'
+   end
 end

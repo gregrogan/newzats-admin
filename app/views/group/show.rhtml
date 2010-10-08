@@ -18,3 +18,5 @@ Members:<br/>
 <% else %>
 Note: This group can only be deleted if associated members are removed
 <% end %>
+<br/>
+<%= link_to 'Add or remove members', {:controller => 'group', :action => 'members', :id => @group.id} -%><br/>

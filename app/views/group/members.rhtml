@@ -1,0 +1,16 @@
+<% content_for :title do %>
+Add/remove members
+<% end %> 
+<h1><%= @group.name %></h1>
+<label for="groups">Members</label>
+<% for member in @members %>
+	<div id="select-member">
+		<%= hidden_field_tag "group[member_ids][]", "" %>
+		<%= check_box_tag "group[member_ids][]", 
+			member.id, @group.members.include?(member) %>
+		<%= member.first_name %> <%= member.last_name %>
+	</div>
+<% end %>
+
+<br/>
+<%= link_to 'Update', {:action => 'update_members', :id => @group.id} -%><br/>
