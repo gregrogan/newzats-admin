@@ -14,7 +14,7 @@ Members:<br/>
 <% end %>
 <br/>
 <% if @members.blank? %>
-<%= link_to :Delete, {:action => 'delete', :id => @group.id} -%>
+<%= link_to :Delete, {:action => 'delete', :id => @group.id} -%><br/>
 <% else %>
 Note: This group can only be deleted if associated members are removed
 <% end %>

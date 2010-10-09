@@ -324,7 +324,6 @@ class MemberController < ApplicationController
 	@groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
 	@groups = Array.new
 	@groups_member.each do |gm|
-	puts(gm.group_id)
 		@groups << Group.find(gm.group_id).name
 	end
 	if (@groups.length > 0)

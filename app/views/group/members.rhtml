@@ -2,7 +2,7 @@
 Add/remove members
 <% end %> 
 <h1><%= @group.name %></h1>
-<label for="groups">Members</label>
+<% form_for :group, @group, :url => { :action => :update_members } do |f| %>
 <% for member in @members %>
 	<div id="select-member">
 		<%= hidden_field_tag "group[member_ids][]", "" %>
@@ -13,4 +13,5 @@ Add/remove members
 <% end %>
 
 <br/>
-<%= link_to 'Update', {:action => 'update_members', :id => @group.id} -%><br/>
+<%= submit_tag "Update" %><br/>
+<% end -%>

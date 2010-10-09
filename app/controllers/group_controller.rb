@@ -50,7 +50,8 @@ class GroupController < ApplicationController
    end
    def update_members
     @group = Group.find(params[:id])
-	@group.save
+	@group.update_attributes(params[:group])
+	flash[:notice] = "Updated members."
     redirect_to :action => 'show'
    end
 end
