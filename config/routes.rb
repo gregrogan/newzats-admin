@@ -34,6 +34,9 @@ map.connect 'membershiptype/new', :controller => 'membershiptype', :action => 'n
 map.connect 'membershiptype/create', :controller => 'membershiptype', :action => 'create'
 map.connect 'membershiptype/delete/:id', :controller => 'membershiptype', :action => 'delete'
 
+map.connect 'user/login', :controller => 'user', :action => 'login'
+map.connect 'user/process_login', :controller => 'user', :action => 'process_login'
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
