@@ -36,6 +36,8 @@ map.connect 'membershiptype/delete/:id', :controller => 'membershiptype', :actio
 
 map.connect 'user/login', :controller => 'user', :action => 'login'
 map.connect 'user/process_login', :controller => 'user', :action => 'process_login'
+map.connect 'user/logout', :controller => 'user', :action => 'logout'
+map.connect 'user/my_account', :controller => 'user', :action => 'my_account'
 
   # The priority is based upon order of creation: first created -> highest priority.
 
