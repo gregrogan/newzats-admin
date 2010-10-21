@@ -24,7 +24,6 @@ class ApplicationController < ActionController::Base
   end  
   def login_required
     unless current_user
-      flash[:error] = 'You must be logged in to view this page.'
       redirect_to :action => 'new', :controller => 'user_sessions' 
     end
   end

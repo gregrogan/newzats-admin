@@ -8,37 +8,39 @@
   </head>
   <body>
     <div id="page">
-      <div id="sidebar">
-	  <a href="/user_sessions/destroy">Logout</a>
-        <ul id="sidebar-items">
-          <li>
-            <form id="search" action="/member/search" method="get">
-              <input type="text" id="term" name="term" />
-              <input type="submit" value="Search" /> members
-            </form>
-          </li>
-        
-          <li>
-            <h3>Member functions</h3>
-            <ul class="links">
-			  <li><a href="/member/new">Add member</a></li>
-              <li><a href="/member/list">Member list</a></li>
-			  <li><a href="/member/email">Email members</a></li>
-            </ul>
-          </li>
+	  <% if current_user %>
+		  <div id="sidebar">
+			<%= link_to "Logout", {:action => :destroy, :controller => :user_sessions} -%>
+			<ul id="sidebar-items">
+			  <li>
+			  <% form_tag form_tag_html(:id => :search), :controller => :member, :action => :search , :id => 'search' do %>
+				<%= text_field_tag :term, params[:term] %>
+				<%= submit_tag "Search" %> members
+			  <% end -%>
+			  </li>
+			
+			  <li>
+				<h3>Member functions</h3>
+				<ul class="links">
+				  <li><%= link_to "Add member", {:action => :new, :controller => :member} -%></li>
+				  <li><%= link_to "Member list", {:action => :list, :controller => :member} -%></li>
+				  <li><%= link_to "Email members", {:action => :email, :controller => :member} -%></li>
+				</ul>
+			  </li>
 
-          <li>
-            <h3>Setup</h3>
-            <ul class="links">
-			  <li><a href="/group/list">Groups</a></li>
-			  <li><a href="/region/list">Regions</a></li>
-			  <li><a href="/membershiptype/list">Membership types</a></li>
-            </ul>
-          </li>
-          
-        </ul>
-      </div>
-
+			  <li>
+				<h3>Setup</h3>
+				<ul class="links">
+				  <li><%= link_to "Groups", {:action => :list, :controller => :group} -%></li>
+				  <li><%= link_to "Regions", {:action => :list, :controller => :region} -%></li>
+				  <li><%= link_to "Membership types", {:action => :list, :controller => :membershiptype} -%></li>
+				</ul>
+			  </li>
+			  
+			</ul>
+		  </div>
+      <% end %>
+	  
       <div id="content">
         <div id="header">
           <h1>NEWZATS Admin - <%= yield :title %></h1>

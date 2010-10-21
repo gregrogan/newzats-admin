@@ -1,43 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
 
+map.connect ':controller/:action/:id'
+
 map.root :controller => "member", :action => 'list'
-
-map.connect 'member/email', :controller => 'member', :action => 'email'
-map.connect 'member/list', :controller => 'member', :action => 'list'
-map.connect 'member/search', :controller => 'member', :action => 'search'
-map.connect 'member/new', :controller => 'member', :action => 'new'
-map.connect 'member/create', :controller => 'member', :action => 'create'
-map.connect 'member/show/:id', :controller => 'member', :action => 'show'
-map.connect 'member/show/:id/notes', :controller => 'member', :action => 'notes'
-map.connect 'member/create/:id/note', :controller => 'member', :action => 'create_note'
-map.connect 'member/edit/:id', :controller => 'member', :action => 'edit'
-map.connect 'member/update/:id', :controller => 'member', :action => 'update'
-map.connect 'member/delete/:id', :controller => 'member', :action => 'delete'
-
-map.connect 'group/list', :controller => 'group', :action => 'list'
-map.connect 'group/show/:id', :controller => 'group', :action => 'show'
-map.connect 'group/new', :controller => 'group', :action => 'new'
-map.connect 'group/create', :controller => 'group', :action => 'create'
-map.connect 'group/delete/:id', :controller => 'group', :action => 'delete'
-map.connect 'group/members/:id', :controller => 'group', :action => 'members'
-map.connect 'group/members/update/:id', :controller => 'group', :action => 'update_members'
-
-map.connect 'region/list', :controller => 'region', :action => 'list'
-map.connect 'region/show/:id', :controller => 'region', :action => 'show'
-map.connect 'region/new', :controller => 'region', :action => 'new'
-map.connect 'region/create', :controller => 'region', :action => 'create'
-map.connect 'region/delete/:id', :controller => 'region', :action => 'delete'
-
-map.connect 'membershiptype/list', :controller => 'membershiptype', :action => 'list'
-map.connect 'membershiptype/show/:id', :controller => 'membershiptype', :action => 'show'
-map.connect 'membershiptype/new', :controller => 'membershiptype', :action => 'new'
-map.connect 'membershiptype/create', :controller => 'membershiptype', :action => 'create'
-map.connect 'membershiptype/delete/:id', :controller => 'membershiptype', :action => 'delete'
-
-map.connect 'user/login', :controller => 'user', :action => 'login'
-map.connect 'user/process_login', :controller => 'user', :action => 'process_login'
-map.connect 'user/logout', :controller => 'user', :action => 'logout'
-map.connect 'user/my_account', :controller => 'user', :action => 'my_account'
 
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -78,6 +43,6 @@ map.connect 'user/my_account', :controller => 'user', :action => 'my_account'
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  #map.connect ':controller/:action/:id'
+  #map.connect ':controller/:action/:id.:format'
 end
