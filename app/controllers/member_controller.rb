@@ -1,4 +1,5 @@
 class MemberController < ApplicationController
+
    def email
       @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
    end
