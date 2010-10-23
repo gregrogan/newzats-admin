@@ -13,7 +13,7 @@
 			<%= link_to "Logout", {:action => :destroy, :controller => :user_sessions} -%>
 			<ul id="sidebar-items">
 			  <li>
-			  <% form_tag form_tag_html(:id => :search), :controller => :member, :action => :search , :id => 'search' do %>
+			  <% form_tag '/member/search', :id => 'search' do %>
 				<%= text_field_tag :term, params[:term] %>
 				<%= submit_tag "Search" %> members
 			  <% end -%>

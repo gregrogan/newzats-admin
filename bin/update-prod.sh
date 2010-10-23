@@ -1,1 +1,1 @@
-cp -r ~/newzats-admin/[!.]* /var/newzatsadmin/
+cp -r ~/newzatsadmin/[!.]* /var/newzatsadmin/
