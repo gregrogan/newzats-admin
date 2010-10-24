@@ -1,5 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
 
+map.connect 'member/update/:id', :controller => 'member', :action => 'update'
+map.connect 'group/update_members/:id', :controller => 'group', :action => 'update_members'
+map.connect 'group/show/:id', :controller => 'group', :action => 'show'
+
 map.connect ':controller/:action/:id'
 
 map.root :controller => "member", :action => 'list'
