@@ -12,6 +12,7 @@ class GroupController < ApplicationController
 			@members << @member
 		end
 	  end
+	  @members.sort! { |a, b| a.last_name <=> b.last_name }
    end
    def new
       @group = Group.new
@@ -46,7 +47,7 @@ class GroupController < ApplicationController
    end
    def members
     @group = Group.find(params[:id])
-	@members = Member.find(:all, :conditions => ["deleted is NULL"])
+	@members = Member.find(:all, :conditions => ["deleted is NULL"], :order => :last_name)
    end
    def update_members
     @group = Group.find(params[:id])

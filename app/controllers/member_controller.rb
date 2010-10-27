@@ -1,7 +1,7 @@
 class MemberController < ApplicationController
 
    def email
-      @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
+      @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"], :order => :last_name)
    end
    def search
 	  @term = params[:term]
@@ -32,7 +32,7 @@ class MemberController < ApplicationController
 			"%"+@term+"%",
 			"%"+@term+"%",
 			"%"+@term+"%"
-		])
+		], :order => :last_name)
    end
    def notes
 		@member = Member.find(params[:id])
@@ -48,7 +48,7 @@ class MemberController < ApplicationController
 
    end
    def list
-      @members = Member.find(:all, :conditions => ["deleted is NULL"])
+      @members = Member.find(:all, :conditions => ["deleted is NULL"], :order => :last_name)
    end
    def show
       @member = Member.find(params[:id])
