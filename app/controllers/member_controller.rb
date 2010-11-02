@@ -141,6 +141,12 @@ class MemberController < ApplicationController
       @member = Member.find(params[:id])
 	  @member.deleted = true
 	  @member.save
+	  @note = Note.new
+	  @note.member_id = @member.id
+	  @note.content = '- deleted this member'
+	  @note.modification_time = Time.now
+	  @note.save
+
       redirect_to :action => 'list'
 
    end
