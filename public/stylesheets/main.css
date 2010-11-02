@@ -208,3 +208,7 @@ margin-bottom: 5px;
 p.create_update_times{
 font-size: 12px;
 }
+
+ul#notes li {
+margin-bottom: 10px;
+}

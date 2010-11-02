@@ -4,6 +4,8 @@ map.connect 'member/update/:id', :controller => 'member', :action => 'update'
 map.connect 'group/update_members/:id', :controller => 'group', :action => 'update_members'
 map.connect 'group/show/:id', :controller => 'group', :action => 'show'
 
+map.connect 'note/list', :controller => 'note', :action => 'list'
+
 map.connect ':controller/:action/:id'
 
 map.root :controller => "member", :action => 'list'
