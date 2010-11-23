@@ -1,5 +1,39 @@
 class MemberController < ApplicationController
 
+   def csv
+   	@members = Member.find(:all, :conditions => ["deleted is NULL"], :order => :last_name)
+	@groups = Array.new
+	Group.find(:all).each do |g|
+		@groups << "Group: " + g.name
+	end
+    	csv_string = FasterCSV.generate do |csv|
+    		# header row
+    		csv << ["ID", "First Name", "Middle Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Region", "Membership Type"] + @groups
+
+    		# data rows
+    		@members.each do |member|
+                        if  (member.email_invalid)
+ 				@email_invalid = 'true'
+			else @email_invalid = ''
+			end
+
+			@member_groups = Array.new
+			Group.find(:all).each do |g|
+				if (GroupsMember.find(:all, :conditions => { :member_id => member.id, :group_id => g.id }) != [])
+					@member_groups << 'Yes'
+				else @member_groups << ''
+				end
+			end
+
+      			csv << [member.id, member.first_name, member.middle_name, member.last_name, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, Region.find(member.region).name, Membershiptype.find(member.membershiptype_id).name] + @member_groups
+    		end
+  	end
+	@time = Time.new.strftime("%d-%m-%Y")
+  	# send it to the browsah
+ 	send_data csv_string,
+            :type => 'text/csv; charset=iso-8859-1; header=present',
+            :disposition => "attachment; filename=newzats-members-" + @time + ".csv"
+   end
    def email
       @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"], :order => :last_name)
    end
