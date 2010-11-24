@@ -153,17 +153,19 @@ class MemberController < ApplicationController
    end
    def update
       @member = Member.find(params[:id])
-	  @orig_member = Member.find(params[:id])
-	  @orig_groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
+      @orig_member = Member.find(params[:id])
+      @orig_groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
       if @member.update_attributes(params[:member])
-		  @note = Note.new
-		  @note.member_id = @member.id
-		  @note.content = note_what_has_changed(:orig_member => @orig_member, :member => @member, :orig_groups_member => @orig_groups_member)
-		  @note.modification_time = Time.now
-		  @note.save
-		  
-		 flash[:notice] = "Successfully saved."
-         redirect_to :action => 'show', :id => @member
+	  @note_content = note_what_has_changed(:orig_member => @orig_member, :member => @member, :orig_groups_member => @orig_groups_member)
+          if (@note_content > '')
+	     @note = Note.new
+	     @note.member_id = @member.id
+	     @note.content = @note_content
+	     @note.modification_time = Time.now
+	     @note.save
+	     flash[:notice] = "Successfully saved."
+          end
+          redirect_to :action => 'show', :id => @member
       else
 	  	  @groups = Group.find(:all)
 		  @regions = Region.find(:all)
