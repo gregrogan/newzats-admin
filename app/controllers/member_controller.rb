@@ -24,8 +24,10 @@ class MemberController < ApplicationController
 				else @member_groups << ''
 				end
 			end
+ 			@member_region
+                       	@member_region = Region.find(member.region).name if member.region
 
-      			csv << [member.id, member.first_name, member.middle_name, member.last_name, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, Region.find(member.region).name, Membershiptype.find(member.membershiptype_id).name] + @member_groups
+      			csv << [member.id, member.first_name, member.middle_name, member.last_name, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_region, Membershiptype.find(member.membershiptype_id).name] + @member_groups
     		end
   	end
 	@time = Time.new.strftime("%d-%m-%Y")
