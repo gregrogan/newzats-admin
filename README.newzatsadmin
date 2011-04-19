@@ -1,0 +1,3 @@
+Once checked out from git, run
+rake db:setup
+to perform the migrations and install default data in db/seeds.rb
