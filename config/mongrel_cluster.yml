@@ -4,5 +4,5 @@ log_file: log/mongrel.log
 port: "9000"
 cwd: /var/apps/newzatsadmin/current
 environment: production
-pid_file: tmp/pids/mongrel.pid
+pid_file: /var/apps/newzatsadmin/current/tmp/pids/mongrel.pid
 servers: 2
