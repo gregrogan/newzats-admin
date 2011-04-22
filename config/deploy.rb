@@ -26,3 +26,8 @@ role :db,  "newzatsadmin.gregrogan.com", :primary => true # This is where Rails 
 #     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
 #   end
 # end
+
+deploy.task :restart, :roles => :app do
+    run "touch #{current_path}/tmp/restart.txt"
+end
+
