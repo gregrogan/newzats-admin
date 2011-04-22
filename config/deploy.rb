@@ -3,7 +3,7 @@ set :repository,  "git@github.com:gregrogan/newzats-admin.git"
 
 set :scm, "git"
 
-set :user, "newzatsadmin"
+set :user, "deploy"
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 ssh_options[:forward_agent] = true
@@ -13,6 +13,9 @@ set :branch, "master"
 role :web, "newzatsadmin.gregrogan.com"                          # Your HTTP server, Apache/etc
 role :app, "newzatsadmin.gregrogan.com"                          # This may be the same as your `Web` server
 role :db,  "newzatsadmin.gregrogan.com", :primary => true # This is where Rails migrations will run
+
+set :deploy_to, "/var/apps/#{application}"
+set :mongrel_conf, "#{current_path}/config/mongrel_cluster.yml"
 #role :db,  "your slave db-server here"
 
 # If you are using Passenger mod_rails uncomment this:
