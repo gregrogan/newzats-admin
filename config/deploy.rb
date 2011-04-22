@@ -1,3 +1,4 @@
+require 'mongrel_cluster/recipes'
 set :application, "newzatsadmin"
 set :repository,  "git@github.com:gregrogan/newzats-admin.git"
 

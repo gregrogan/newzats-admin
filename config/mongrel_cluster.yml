@@ -2,7 +2,7 @@
 address: 127.0.0.1
 log_file: log/mongrel.log
 port: "9000"
-cwd: /u/apps/newzatsadmin/current
+cwd: /var/apps/newzatsadmin/current
 environment: production
 pid_file: tmp/pids/mongrel.pid
 servers: 2
