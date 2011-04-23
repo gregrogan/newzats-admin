@@ -75,12 +75,13 @@ class MemberController < ApplicationController
 		@notes = Note.find(:all, :conditions => {:member_id => @member.id}, :order => 'modification_time DESC' )
    end
    def create_note
+              @member = Member.find(params[:id])
 	      @note = Note.new(params[:note])
 		  @note.member_id = params[:id]
 		  @note.modification_time = Time.now
 		  @note.save
 		 flash[:notice] = "Note saved."
-		redirect_to :action => 'show'
+                redirect_to :action => 'show', :id => @member
 
    end
    def list
