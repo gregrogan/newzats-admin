@@ -1,5 +1,5 @@
 <% content_for :title do %>
-Notes for member
+  Notes for member <%= "#{@member.first_name+' '+@member.last_name}" %>
 <% end %> 
 
 <% @notes.each do |note| %>

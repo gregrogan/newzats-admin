@@ -1,3 +1,8 @@
 Once checked out from git, run
 rake db:setup
-to perform the migrations and install default data in db/seeds.rb
+which perform the migrations and install default data in db/seeds.rb
+
+using cap to deploy (once commited and pushed to github)
+cap deploy:cold (if first time)
+cap deploy (to update static files)
+cap mongrel:cluster:restart (if code changed) 
