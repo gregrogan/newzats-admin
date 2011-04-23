@@ -1,3 +1,4 @@
+require 'mongrel'
 #if Rails.version == '2.3.8' && Gem.available?('mongrel', Gem::Requirement.new('~>1.1.5')) && self.class.const_defined?(:Mongrel)
 #if Rails.version == '2.3.5' && Gem.available?('mongrel', '~>1.1.5') && self.class.const_defined?(:Mongrel)
   
