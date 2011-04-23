@@ -41,6 +41,7 @@ class MemberController < ApplicationController
    end
    def search
 	  @term = params[:term]
+          @term = '' if !@term #ensure term is not null so below find works
 	  @members = Member.find(:all, :conditions => [
 		"deleted is NULL AND 
 		(first_name like ? OR

@@ -1,8 +1,18 @@
 <% content_for :title do %>
-Search results
+  Search results for <%= @term %>
 <% end %>
 <br/>
-<% @members.each do |c| %>
-<li><%= link_to "#{c.first_name+' '+c.last_name}", {:action => 'show', :id => c.id} -%></li>
+
+<% if @term > '' %>
+  <% if @members.length > 0 %>
+    <ul>
+    <% @members.each do |c| %>
+    <li><%= link_to "#{c.first_name+' '+c.last_name}", {:action => 'show', :id => c.id} -%></li>
+    <% end %>
+    </ul>
+  <% else %>
+    No results sorry
+  <% end %>
+<% else %>
+  Please enter a search term!
 <% end %>
-</ul>
