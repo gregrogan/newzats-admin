@@ -217,8 +217,9 @@ textarea#member_email_data {
 width: 90%;
 }
 
-table.sortable th {
+table.sortable th, td{
  text-align: left;
+ white-space: nowrap;
 }
 
 table.sortable th a {
@@ -229,3 +230,4 @@ table.sortable th a {
 table.sortable th img {
   border:none;
 }
+

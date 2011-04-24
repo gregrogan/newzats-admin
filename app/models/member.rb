@@ -17,7 +17,11 @@ class Member < ActiveRecord::Base
   end
 
   def list_name
-    [last_name, first_name].join(', ')
+    if last_name == ''
+      first_name
+    else
+      [last_name, first_name].join(', ')
+    end
   end
 
   attr_accessor :group_ids
