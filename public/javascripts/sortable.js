@@ -91,7 +91,7 @@ function ts_resortTable(lnk, clid) {
   // Work out a type for the column
   if (t.rows.length <= 1) return;
   var itm = "";
-  var i = 0;
+  var i = 1;
   while (itm == "" && i < t.tBodies[0].rows.length) {
     var itm = ts_getInnerText(t.tBodies[0].rows[i].cells[column]);
     itm = trim(itm);
@@ -102,11 +102,11 @@ function ts_resortTable(lnk, clid) {
   }
   if (itm == "") return; 
   sortfn = ts_sort_caseinsensitive;
+  if (itm.match(/^-?[£$€Û¢´]\d/)) sortfn = ts_sort_numeric;
+  if (itm.match(/^-?(\d+[,\.]?)+(E[-+][\d]+)?%?$/)) sortfn = ts_sort_numeric;
   if (itm.match(/^\d\d[\/\.-][a-zA-z][a-zA-Z][a-zA-Z][\/\.-]\d\d\d\d$/)) sortfn = ts_sort_date;
   if (itm.match(/^[a-zA-z][a-zA-Z][a-zA-Z] \d\d\d\d$/)) sortfn = ts_sort_date;
   if (itm.match(/^\d\d[\/\.-]\d\d[\/\.-]\d\d\d{2}?$/)) sortfn = ts_sort_date;
-  if (itm.match(/^-?[£$€Û¢´]\d/)) sortfn = ts_sort_numeric;
-  if (itm.match(/^-?(\d+[,\.]?)+(E[-+][\d]+)?%?$/)) sortfn = ts_sort_numeric;
   SORT_COLUMN_INDEX = column;
   var firstRow = new Array();
   var newRows = new Array();
@@ -174,8 +174,9 @@ function getParent(el, pTagName) {
 
 function sort_date(date) {      
   // y2k notes: two digit years less than 50 are treated as 20XX, greater than 50 are treated as 19XX
+  date = trim(date);
   dt = "00000000";
-  if (date.length == 7) {
+  if (date.match(/^[a-zA-z][a-zA-Z][a-zA-Z] \d\d\d\d$/)) {
     mtstr = date.substr(0,3);
     mtstr = mtstr.toLowerCase();
     switch(mtstr) {
