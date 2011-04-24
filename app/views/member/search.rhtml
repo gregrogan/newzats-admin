@@ -5,6 +5,7 @@
 
 <% if @term > '' %>
   <% if @members.length > 0 %>
+    Found: <%= @members.length %>
     <ul>
     <% @members.each do |c| %>
     <li><%= link_to "#{c.first_name+' '+c.last_name}", {:action => 'show', :id => c.id} -%></li>
