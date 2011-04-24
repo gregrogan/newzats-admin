@@ -4,7 +4,7 @@ margin-bottom: 25px;
 padding: 0;
 background-color: #f0f0f0;
 font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
-font-size: 14px;
+font-size: 12px;
 color: #333;
 }
 
@@ -215,4 +215,17 @@ margin-bottom: 10px;
 
 textarea#member_email_data {
 width: 90%;
+}
+
+table.sortable th {
+ text-align: left;
+}
+
+table.sortable th a {
+ text-align: left;
+ text-decoration: none;
+}
+
+table.sortable th img {
+  border:none;
 }

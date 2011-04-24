@@ -1,0 +1,27 @@
+<table id="members" class="sortable">
+  <tr>
+    <th nowrap="true">Name</th>
+    <th nowrap="true">Type</th>
+    <th nowrap="true">Since</th>
+    <th nowrap="true">Email</th>
+  </tr>
+
+  <% @members = @members.sort_by { |m| m.list_name } %>
+
+  <% @members.each do |c| %>
+    <tr>
+      <td>
+        <%= link_to "#{c.list_name}", {:controller => 'member', :action => 'show', :id => c.id} -%>
+      </td>
+      <td>
+        <%= Membershiptype.find(c.membershiptype_id).name %>
+      </td>
+      <td>
+        <%= c.created_at.strftime('%b %Y') %>
+      </td>
+      <td>
+        <a href="mailto:<%= c.email %>"><%= c.email %></a>
+      </td>
+    </tr>
+  <% end %>
+</table>

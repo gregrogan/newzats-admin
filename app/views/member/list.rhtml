@@ -4,9 +4,5 @@ Member list
 <% if @members.blank? %>
 <p>There are no members currently in the system.</p>
 <% else %>
-<ul id="members">
-<% @members.each do |c| %>
-<li><%= link_to "#{c.first_name+' '+c.last_name}", {:action => 'show', :id => c.id} -%></li>
-<% end %>
-</ul>
+  <%= render "member_list", :locals => { :members => @members } %>
 <% end %>

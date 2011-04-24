@@ -47,7 +47,7 @@ class GroupController < ApplicationController
    end
    def members
     @group = Group.find(params[:id])
-	@members = Member.find(:all, :conditions => ["deleted is NULL"], :order => :last_name)
+	@members = Member.find(:all, :conditions => ["deleted is NULL"])
    end
    def update_members
     @group = Group.find(params[:id])

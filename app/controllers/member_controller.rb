@@ -1,7 +1,8 @@
 class MemberController < ApplicationController
 
    def csv
-   	@members = Member.find(:all, :conditions => ["deleted is NULL"], :order => :last_name)
+   	@members = Member.find(:all, :conditions => ["deleted is NULL"])
+        @members = @members.sort_by { |m| m.list_name }
 	@groups = Array.new
 	Group.find(:all).each do |g|
 		@groups << "Group: " + g.name
@@ -37,7 +38,8 @@ class MemberController < ApplicationController
             :disposition => "attachment; filename=newzats-members-" + @time + ".csv"
    end
    def email
-      @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"], :order => :last_name)
+      @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
+      @members = @members.sort_by { |m| m.list_name }
    end
    def search
 	  @term = params[:term]
@@ -69,7 +71,7 @@ class MemberController < ApplicationController
 			"%"+@term+"%",
 			"%"+@term+"%",
 			"%"+@term+"%"
-		], :order => :last_name)
+		])
    end
    def notes
 		@member = Member.find(params[:id])
@@ -86,7 +88,7 @@ class MemberController < ApplicationController
 
    end
    def list
-      @members = Member.find(:all, :conditions => ["deleted is NULL"], :order => :last_name)
+      @members = Member.find(:all, :conditions => ["deleted is NULL"])
    end
    def show
       @member = Member.find(params[:id])

@@ -4,7 +4,7 @@ class RegionController < ApplicationController
    end
    def show
 	  @region = Region.find(params[:id])
-	  @region_members = Member.find(:all, :conditions => { :region_id => @region.id }, :order => :last_name)
+	  @region_members = Member.find(:all, :conditions => { :region_id => @region.id })
 	  @members = Array.new
 	  @region_members.each do |rm|
 	    if !(rm.deleted)

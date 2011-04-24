@@ -11,7 +11,15 @@ class Member < ActiveRecord::Base
 	:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
 	:message => 'must be valid e.g someone@something.com'
   has_many :notes
-  
+
+  def full_name
+    [first_name, last_name].join(' ')
+  end
+
+  def list_name
+    [last_name, first_name].join(', ')
+  end
+
   attr_accessor :group_ids
   after_save :update_groups
 

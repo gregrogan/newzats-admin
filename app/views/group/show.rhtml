@@ -5,12 +5,8 @@ View group
 <% if @members.blank? %>
 <p>No members currently in this group.</p>
 <% else %>
-Members:<br/>
-<ul id="members">
-<% @members.each do |c| %>
-<li><%= link_to "#{c.first_name+' '+c.last_name}", {:controller => 'member', :action => 'show', :id => c.id} -%></li>
-<% end %>
-</ul>
+  Members:<br/>
+  <%= render "member/member_list", :locals => { :members => @members } %>
 <% end %>
 <br/>
 <% if @members.blank? %>
