@@ -14,7 +14,7 @@ var image_up = "arrow-up.gif";
 var image_down = "arrow-down.gif";
 var image_none = "arrow-none.gif";
 var europeandate = true;
-var alternate_row_colors = true;
+var alternate_row_colors = false;
 
 /* Don't change anything below this unless you know what you're doing */
 addEvent(window, "load", sortables_init);
@@ -103,6 +103,7 @@ function ts_resortTable(lnk, clid) {
   if (itm == "") return; 
   sortfn = ts_sort_caseinsensitive;
   if (itm.match(/^\d\d[\/\.-][a-zA-z][a-zA-Z][a-zA-Z][\/\.-]\d\d\d\d$/)) sortfn = ts_sort_date;
+  if (itm.match(/^[a-zA-z][a-zA-Z][a-zA-Z] \d\d\d\d$/)) sortfn = ts_sort_date;
   if (itm.match(/^\d\d[\/\.-]\d\d[\/\.-]\d\d\d{2}?$/)) sortfn = ts_sort_date;
   if (itm.match(/^-?[£$€Û¢´]\d/)) sortfn = ts_sort_numeric;
   if (itm.match(/^-?(\d+[,\.]?)+(E[-+][\d]+)?%?$/)) sortfn = ts_sort_numeric;
@@ -174,7 +175,27 @@ function getParent(el, pTagName) {
 function sort_date(date) {      
   // y2k notes: two digit years less than 50 are treated as 20XX, greater than 50 are treated as 19XX
   dt = "00000000";
-  if (date.length == 11) {
+  if (date.length == 7) {
+    mtstr = date.substr(0,3);
+    mtstr = mtstr.toLowerCase();
+    switch(mtstr) {
+      case "jan": var mt = "01"; break;
+      case "feb": var mt = "02"; break;
+      case "mar": var mt = "03"; break;
+      case "apr": var mt = "04"; break;
+      case "may": var mt = "05"; break;
+      case "jun": var mt = "06"; break;
+      case "jul": var mt = "07"; break;
+      case "aug": var mt = "08"; break;
+      case "sep": var mt = "09"; break;
+      case "oct": var mt = "10"; break;
+      case "nov": var mt = "11"; break;
+      case "dec": var mt = "12"; break;
+      // default: var mt = "00";
+    }
+    dt = date.substr(4,4)+mt+"01";
+    return dt;
+  } else if (date.length == 11) {
     mtstr = date.substr(3,3);
     mtstr = mtstr.toLowerCase();
     switch(mtstr) {
