@@ -212,3 +212,7 @@ font-size: 12px;
 ul#notes li {
 margin-bottom: 10px;
 }
+
+textarea#member_email_data {
+width: 90%;
+}
