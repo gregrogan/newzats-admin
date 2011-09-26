@@ -1,0 +1,15 @@
+<% content_for :title do %>
+  Payments for member <%= "#{@member.first_name+' '+@member.last_name}" %>
+<% end %> 
+
+<% @payments.each do |payment| %>
+on <%= payment.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
+$<%= payment.amount %>
+<% if payment.partial %>
+  <span class="partial">(partial)</span>
+<% end %>
+for <%= payment.year %> by <%= payment.method %> <%= link_to 'remove', {:action => 'delete_payment', :id => payment.id} -%>
+
+<br/>
+<br/>
+<% end %>

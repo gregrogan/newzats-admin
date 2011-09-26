@@ -231,3 +231,18 @@ table.sortable th img {
   border:none;
 }
 
+a#member_edit {
+  float: left;
+  font-size: 16:px;
+}
+
+a#member_delete {
+  float: right;
+  font-size: 16:px;
+  color: red;
+
+}
+
+.partial {
+  color: red;
+}

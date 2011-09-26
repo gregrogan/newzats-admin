@@ -1,9 +1,13 @@
 <% content_for :title do %>
-Member details
+<%= @member.first_name+' '+@member.middle_name+' '+@member.last_name %>
 <% end %>
-Name: <%= @member.first_name+' '+@member.middle_name+' '+@member.last_name %><br/>
+
+<%= link_to :Edit, {:action => 'edit', :id => @member.id}, :id => "member_edit" -%>
+<%= link_to :Delete, {:action => 'delete', :id => @member.id}, { :id => "member_delete", :confirm => "Are you sure you wish to delete member #{@member.first_name+' '+@member.last_name}?" } -%>
+
+<br/><br/>
+
 <% if @member.email > "" %>
-Email: 
 <% if @email_display == 'valid' %>
 <a href="mailto:<%= @member.email %>"><%= @member.email %></a><br/>
 <% end %>
@@ -45,15 +49,65 @@ details last updated: <%= @member.updated_at.in_time_zone("Auckland").strftime("
 date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
 </p>
 
-<% form_for :note, @note, :url => { :action => :create_note, :id => @member.id } do |f| %>
-<%= f.text_area :content, :cols => 40, :rows => 4 %><br/>
-<%= submit_tag "Add note" %>
-<% end -%>
+<script>
 
-<br/>
-<%= link_to 'View notes', {:action => 'notes', :id => @member.id} -%><br/>
-<br/>
+  $(document).ready(function(){
 
-<%= link_to :Edit, {:action => 'edit', :id => @member.id} -%><br/>
-<br/>
-<%= link_to :Delete, {:action => 'delete', :id => @member.id}, :confirm => "Are you sure you wish to delete member #{@member.first_name+' '+@member.last_name}?" -%>
+    $('form#record_subs_payment').submit(function(e){
+      payment_amount = $(this).find('#payment_amount').val().replace(/\$/g,"");
+      if ( payment_amount != "" && isNaN(parseFloat(payment_amount)) ) {
+        alert('Error: Amount must be a price (without $)');
+        e.preventDefault();
+      }
+    });
+
+    $('#tabs').tabs();
+  });
+
+</script>
+
+
+<div id="tabs">
+
+  <ul>
+    <li><a href="#notes">Notes</a></li>
+    <li><a href="#payments">Subs payments</a></li>
+  </ul>
+
+  <div id="notes">
+
+    <% form_for :note, @note, :url => { :action => :create_note, :id => @member.id } do |f| %>
+      <%= f.text_area :content, :cols => 40, :rows => 4 %><br/>
+      <%= submit_tag "Add note" %>
+    <% end -%>
+
+    <br/>
+    <%= link_to 'View notes', {:action => 'notes', :id => @member.id} -%>
+
+  </div>
+
+
+  <div id="payments">
+
+    <% form_for :payment, @payment, :url => { :action => :create_payment, :id => @member.id }, :html => { :id => "record_subs_payment"} do |f| %>
+      <label for="year">Year</label>  
+      <%= f.select :year, @year_options, { :selected => @current_year } %><br/>
+
+      <label for="amount">Amount $</label>  
+      <%= f.text_field :amount %><br/>
+
+      <label for="method">Method</label>
+      <%= f.select :method, @payment_methods, { :selected => @payment_methods[0], :include_blank => true } %><br/>
+
+      <label for="partial">Partial payment?</label>
+      <%= f.check_box :partial %>
+
+      <br/>
+      <%= submit_tag "Record payment" %>
+    <% end -%>
+    <br/>
+    <%= link_to 'View payments', {:action => 'payments', :id => @member.id} -%>
+  </div>
+
+</div>
+

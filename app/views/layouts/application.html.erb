@@ -5,13 +5,18 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <title>NEWZATS Admin - <%= yield :title %></title>
     <link href="/stylesheets/main.css" type="text/css" rel="stylesheet"/>
+    <link href="/stylesheets/jquery-ui.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="/javascripts/sortable.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-ui.js"></script>
   </head>
   <body>
     <div id="page">
 	  <% if current_user %>
 		  <div id="sidebar">
-			<%= link_to "Logout", {:action => :destroy, :controller => :user_sessions} -%>
+                    <%= link_to "Logout", {:action => :destroy, :controller => :user_sessions} -%>
+                    <br/><br/>
+                    <img src="/images/newzats-logo.gif"></img>
 			<ul id="sidebar-items">
 			  <li>
 			  <% form_tag '/member/search', :id => 'search' do %>
@@ -46,7 +51,7 @@
 	  
       <div id="content">
         <div id="header">
-          <h1>NEWZATS Admin - <%= yield :title %></h1>
+          <h1><%= yield :title %></h1>
         </div>
 		<br/>
 		<p style="color: green"><%= notice %></p>

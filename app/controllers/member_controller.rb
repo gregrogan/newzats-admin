@@ -118,6 +118,19 @@ class MemberController < ApplicationController
 			@groups << Group.find(gm.group_id)
 		  end
 	  end
+          @payment_methods = ["Bank account deposit","Cheque","Cash","Credit Card"]
+          @current_year = Time.new.year
+          @year_options = [@current_year-5,
+                          @current_year-4,
+                          @current_year-3,
+                          @current_year-2,
+                          @current_year-1,
+                          @current_year,
+                          @current_year+1,
+                          @current_year+2,
+                          @current_year+3,
+                          @current_year+4,
+                          @current_year+5]
    end
    def new
       @member = Member.new
@@ -380,5 +393,43 @@ class MemberController < ApplicationController
 	end
 	
 	return @creates
+   end
+   def create_payment
+              @member = Member.find(params[:id])
+	      @payment = Payment.new(params[:payment])
+		  @payment.member_id = params[:id]
+		  @payment.modification_time = Time.now
+                  @payment.save
+
+	      @note = Note.new
+		  @note.member_id = params[:id]
+		  @note.modification_time = Time.now
+                  @note.content = "recorded subs payment $ "+@payment.amount.to_s
+                  @note.content += " (partial)" if @payment.partial
+                  @note.content += " for "+@payment.year.to_s+" by "+@payment.method
+		  @note.save
+
+		 flash[:notice] = "Payment saved."
+                redirect_to :action => 'show', :id => @member
+
+   end
+   def delete_payment
+      @payment = Payment.find(params[:id])
+      @payment.delete
+
+      @note = Note.new
+      @note.member_id = @payment.member_id
+      @note.modification_time = Time.now
+      @note.content = "removed subs payment $ "+@payment.amount.to_s
+      @note.content += " (partial)" if @payment.partial
+      @note.content += " for "+@payment.year.to_s+" by "+@payment.method
+      @note.save
+
+      flash[:notice] = "Payment removed."
+      redirect_to :action => 'payments', :id => @payment.member_id
+   end
+   def payments
+	@member = Member.find(params[:id])
+	@payments = Payment.find(:all, :conditions => {:member_id => @member.id}, :order => 'modification_time DESC' )
    end
 end
