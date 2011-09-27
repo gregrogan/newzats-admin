@@ -7,9 +7,21 @@ class MemberController < ApplicationController
 	Group.find(:all).each do |g|
 		@groups << "Group: " + g.name
 	end
+        @current_year = Time.new.year
+        @payment_years = [@current_year-5,
+                          @current_year-4,
+                          @current_year-3,
+                          @current_year-2,
+                          @current_year-1,
+                          @current_year,
+                          @current_year+1]
+        @payment_years_header = Array.new
+        @payment_years.each do |p|
+          @payment_years_header << "Subs: " + p.to_s()
+        end
     	csv_string = FasterCSV.generate do |csv|
     		# header row
-    		csv << ["ID", "First Name", "Middle Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Region", "Membership Type"] + @groups
+    		csv << ["ID", "First Name", "Middle Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Region", "Membership Type"] + @payment_years_header + @groups
 
     		# data rows
     		@members.each do |member|
@@ -17,6 +29,18 @@ class MemberController < ApplicationController
  				@email_invalid = 'true'
 			else @email_invalid = ''
 			end
+
+                        @payments = Array.new
+                        @payment_years.each do |year|
+                          if (Payment.find(:all, :conditions => { :member_id => member.id, :year => year, :partial => false }) != [])
+                            @payments << 'Yes'
+                          elsif (Payment.find(:all, :conditions => { :member_id => member.id, :year => year, :partial => true }) != [])
+                            @payments << 'Partial'
+                          else
+                            @payments << ''
+                          end
+                        end
+
 
 			@member_groups = Array.new
 			Group.find(:all).each do |g|
@@ -28,7 +52,7 @@ class MemberController < ApplicationController
  			@member_region
                        	@member_region = Region.find(member.region).name if member.region
 
-      			csv << [member.id, member.first_name, member.middle_name, member.last_name, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_region, Membershiptype.find(member.membershiptype_id).name] + @member_groups
+      			csv << [member.id, member.first_name, member.middle_name, member.last_name, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_region, Membershiptype.find(member.membershiptype_id).name] + @payments + @member_groups
     		end
   	end
 	@time = Time.new.strftime("%d-%m-%Y")
