@@ -105,6 +105,7 @@ class MemberController < ApplicationController
               @member = Member.find(params[:id])
 	      @note = Note.new(params[:note])
 		  @note.member_id = params[:id]
+                  @note.user_id = current_user.id
 		  @note.modification_time = Time.now
 		  @note.save
 		 flash[:notice] = "Note saved."
@@ -116,6 +117,8 @@ class MemberController < ApplicationController
    end
    def show
       @member = Member.find(params[:id])
+      @notes = Note.find(:all, :conditions => {:member_id => @member.id}, :order => 'modification_time DESC' )
+      @payments = Payment.find(:all, :conditions => {:member_id => @member.id}, :order => 'modification_time DESC' )
 	  if (@member.deleted)
 	    flash[:notice] = "Error: This member (id #{@member.id}) has been deleted"
 		redirect_to :action => 'list'
@@ -155,6 +158,10 @@ class MemberController < ApplicationController
                           @current_year+3,
                           @current_year+4,
                           @current_year+5]
+          @paid = false
+          if (Payment.find(:all, :conditions => { :member_id => @member.id, :year => Time.now.strftime('%Y'), :partial => false }) != [])
+            @paid = true
+          end
    end
    def new
       @member = Member.new
@@ -422,12 +429,14 @@ class MemberController < ApplicationController
               @member = Member.find(params[:id])
 	      @payment = Payment.new(params[:payment])
 		  @payment.member_id = params[:id]
+                  @payment.user_id = current_user.id
 		  @payment.modification_time = Time.now
                   @payment.save
 
 	      @note = Note.new
 		  @note.member_id = params[:id]
 		  @note.modification_time = Time.now
+                  @note.user_id = current_user.id
                   @note.content = "recorded subs payment $ "+@payment.amount.to_s
                   @note.content += " (partial)" if @payment.partial
                   @note.content += " for "+@payment.year.to_s+" by "+@payment.method
@@ -444,13 +453,14 @@ class MemberController < ApplicationController
       @note = Note.new
       @note.member_id = @payment.member_id
       @note.modification_time = Time.now
+      @note.user_id = current_user.id
       @note.content = "removed subs payment $ "+@payment.amount.to_s
       @note.content += " (partial)" if @payment.partial
       @note.content += " for "+@payment.year.to_s+" by "+@payment.method
       @note.save
 
       flash[:notice] = "Payment removed."
-      redirect_to :action => 'payments', :id => @payment.member_id
+      redirect_to :action => 'show', :id => @payment.member_id
    end
    def payments
 	@member = Member.find(params[:id])

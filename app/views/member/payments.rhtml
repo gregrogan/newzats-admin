@@ -8,7 +8,7 @@ $<%= payment.amount %>
 <% if payment.partial %>
   <span class="partial">(partial)</span>
 <% end %>
-for <%= payment.year %> by <%= payment.method %> <%= link_to 'remove', {:action => 'delete_payment', :id => payment.id} -%>
+for <%= payment.year %> by <%= payment.method %>, recorded by <%= User.find(payment.user_id).name %> <%= link_to 'remove', {:action => 'delete_payment', :id => payment.id} -%>
 
 <br/>
 <br/>

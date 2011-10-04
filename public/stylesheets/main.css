@@ -209,7 +209,7 @@ p.create_update_times{
 font-size: 12px;
 }
 
-ul#notes li {
+ul#all_notes li {
 margin-bottom: 10px;
 }
 
@@ -245,4 +245,54 @@ a#member_delete {
 
 .partial {
   color: red;
+}
+
+#notes, #payments {
+  width: 240px;
+  height: 620px;
+  float: left;
+}
+
+#payments {
+  padding-left: 15px;
+  border-left: 1px solid black;
+}
+
+#notes label, #payments label {
+  width: auto;
+  margin-top: 3px;
+}
+
+#notes textarea#note_content {
+  width: 200px;
+}
+
+#payments input#payment_amount {
+  width: 100px;
+}
+
+#payments .paid, #payments .unpaid {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+#payments .paid {
+  color: green;
+}
+
+#payments .unpaid {
+  color: red;
+}
+
+#notes_list, #payments_list {
+  width: 230px;
+  overflow-y: auto;
+}
+
+#notes_list {
+  height: 400px;
+}
+
+#payments_list {
+  height: 380px;
 }

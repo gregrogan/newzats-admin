@@ -6,6 +6,6 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Major.create(:name => 'Daley', :city => cities.first)
 
-User.create(:login => 'admin', :password => 'admin', :password_confirmation => 'admin')
+User.create(:login => 'admin', :password => 'admin', :password_confirmation => 'admin', :name => 'Administrator')
 
 Membershiptype.create( :name => 'Full' )

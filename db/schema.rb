@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110925111429) do
+ActiveRecord::Schema.define(:version => 20110930092555) do
 
   create_table "groups", :force => true do |t|
     t.string "name"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20110925111429) do
     t.integer  "member_id"
     t.string   "content"
     t.datetime "modification_time"
+    t.integer  "user_id"
   end
 
   create_table "payments", :force => true do |t|
@@ -61,6 +62,7 @@ ActiveRecord::Schema.define(:version => 20110925111429) do
     t.string   "method"
     t.datetime "modification_time"
     t.boolean  "partial"
+    t.integer  "user_id"
   end
 
   create_table "regions", :force => true do |t|
@@ -76,6 +78,8 @@ ActiveRecord::Schema.define(:version => 20110925111429) do
     t.string   "persistence_token", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.boolean  "disabled"
   end
 
 end

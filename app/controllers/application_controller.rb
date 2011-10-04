@@ -23,7 +23,18 @@ class ApplicationController < ActionController::Base
     @current_user ||= current_user_session && current_user_session.user  
   end  
   def login_required
-    unless current_user
+
+    @logged_out = true
+    if current_user
+      @logged_out = false
+    end
+
+    @user_disabled = false
+    if current_user && User.find(current_user.id).disabled
+      @user_disabled = true
+    end
+
+    if @logged_out || @user_disabled
       redirect_to :action => 'new', :controller => 'user_sessions' 
     end
   end

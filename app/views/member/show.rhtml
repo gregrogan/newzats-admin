@@ -61,53 +61,69 @@ date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y"
       }
     });
 
-    $('#tabs').tabs();
   });
 
 </script>
 
 
-<div id="tabs">
+<div id="notes">
+  <h3>Notes</h3>
+  <% form_for :note, @note, :url => { :action => :create_note, :id => @member.id } do |f| %>
+    <%= f.text_area :content, :cols => 40, :rows => 4 %><br/>
+    <%= submit_tag "Add note" %>
+  <% end -%>
 
-  <ul>
-    <li><a href="#notes">Notes</a></li>
-    <li><a href="#payments">Subs payments</a></li>
-  </ul>
+  <br/>
+  <% if @notes.length > 0 %>
+    <h3>Current notes</h3>
+    <div id="notes_list">
+      <% @notes.each do |note| %>
+        on <%= note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %> by <%= User.find(note.user_id).name %><br/>
+        <%= note.content %>
+        <br/><br/>
+      <% end %>
+    </div>
+  <% else %>
+    No notes recorded
+  <% end %>
 
-  <div id="notes">
+</div>
 
-    <% form_for :note, @note, :url => { :action => :create_note, :id => @member.id } do |f| %>
-      <%= f.text_area :content, :cols => 40, :rows => 4 %><br/>
-      <%= submit_tag "Add note" %>
-    <% end -%>
+
+<div id="payments">
+  <h3>Payments - <% if @paid %><span class="paid">Paid</span><%else%><span class="unpaid">Unpaid</span><%end%></h3>
+  <% form_for :payment, @payment, :url => { :action => :create_payment, :id => @member.id }, :html => { :id => "record_subs_payment"} do |f| %>
+    <label for="year">Year</label>  
+    <%= f.select :year, @year_options, { :selected => @current_year } %><br/>
+
+    <label for="amount">Amount $</label>  
+    <%= f.text_field :amount %><br/>
+
+    <label for="method">Method</label>
+    <%= f.select :method, @payment_methods, { :selected => @payment_methods[0], :include_blank => true } %><br/>
+
+    <label for="partial">Partial payment?</label>
+    <%= f.check_box :partial %>
 
     <br/>
-    <%= link_to 'View notes', {:action => 'notes', :id => @member.id} -%>
-
-  </div>
-
-
-  <div id="payments">
-
-    <% form_for :payment, @payment, :url => { :action => :create_payment, :id => @member.id }, :html => { :id => "record_subs_payment"} do |f| %>
-      <label for="year">Year</label>  
-      <%= f.select :year, @year_options, { :selected => @current_year } %><br/>
-
-      <label for="amount">Amount $</label>  
-      <%= f.text_field :amount %><br/>
-
-      <label for="method">Method</label>
-      <%= f.select :method, @payment_methods, { :selected => @payment_methods[0], :include_blank => true } %><br/>
-
-      <label for="partial">Partial payment?</label>
-      <%= f.check_box :partial %>
-
-      <br/>
-      <%= submit_tag "Record payment" %>
-    <% end -%>
-    <br/>
-    <%= link_to 'View payments', {:action => 'payments', :id => @member.id} -%>
-  </div>
-
+    <%= submit_tag "Record payment" %>
+  <% end -%>
+  <br/>
+  <% if @payments.length > 0%>
+    <h3>Recorded payments</h3>
+    <div id="payments_list">
+      <% @payments.each do |payment| %>
+        on <%= payment.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
+        $<%= payment.amount %>
+        <% if payment.partial %>
+           <span class="partial">(partial)</span>
+         <% end %>
+         for <%= payment.year %> by <%= payment.method %>, recorded by <%= User.find(payment.user_id).name %> <%= link_to 'remove', {:action => 'delete_payment', :id => payment.id} -%>
+        <br/><br/>
+      <% end %>
+    </div>
+  <% else %>
+    No payments currently recorded
+  <% end %>
 </div>
 

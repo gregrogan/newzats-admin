@@ -3,6 +3,7 @@
     <th>Name</th>
     <th>Type</th>
     <th>Since</th>
+    <th>Paid?</th>
   </tr>
 
   <% @members = @members.sort_by { |m| m.list_name.downcase } %>
@@ -17,6 +18,11 @@
       </td>
       <td nowrap="true">
         <%= c.created_at.strftime('%b %Y') %>
+      </td>
+      <td nowrap="true">
+        <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Time.now.strftime('%Y'), :partial => false }) != []) %>
+          Yes
+        <% end %>
       </td>
     </tr>
   <% end %>

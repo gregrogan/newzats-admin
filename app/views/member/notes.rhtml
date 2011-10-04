@@ -3,7 +3,7 @@
 <% end %> 
 
 <% @notes.each do |note| %>
-on <%= note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
+  on <%= note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %> by <%= User.find(note.user_id).name %><br/>
 <%= note.content %>
 <br/>
 <br/>

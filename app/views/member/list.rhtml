@@ -4,5 +4,6 @@ Member list
 <% if @members.blank? %>
 <p>There are no members currently in the system.</p>
 <% else %>
+  <p>Tip: To order by a column, click the column name.</p>
   <%= render "member_list", :locals => { :members => @members } %>
 <% end %>
