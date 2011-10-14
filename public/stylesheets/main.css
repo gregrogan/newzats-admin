@@ -233,12 +233,11 @@ table.sortable th img {
 
 a#member_edit {
   float: left;
-  font-size: 16:px;
+  font-size: 20px;
 }
 
 a#member_delete {
   float: right;
-  font-size: 16:px;
   color: red;
 
 }
@@ -293,6 +292,14 @@ a#member_delete {
   height: 400px;
 }
 
+#notes_list .added, #payments_list .added {
+  background-color: lightblue;
+}
+
 #payments_list {
   height: 380px;
+}
+
+#notes_msg, #payments_msg {
+  color: green;
 }

@@ -5,7 +5,7 @@
 <%= link_to :Edit, {:action => 'edit', :id => @member.id}, :id => "member_edit" -%>
 <%= link_to :Delete, {:action => 'delete', :id => @member.id}, { :id => "member_delete", :confirm => "Are you sure you wish to delete member #{@member.first_name+' '+@member.last_name}?" } -%>
 
-<br/><br/>
+<br/><br/><br/>
 
 <% if @member.email > "" %>
 <% if @email_display == 'valid' %>
@@ -49,23 +49,6 @@ details last updated: <%= @member.updated_at.in_time_zone("Auckland").strftime("
 date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
 </p>
 
-<script>
-
-  $(document).ready(function(){
-
-    $('form#record_subs_payment').submit(function(e){
-      payment_amount = $(this).find('#payment_amount').val().replace(/\$/g,"");
-      if ( payment_amount != "" && isNaN(parseFloat(payment_amount)) ) {
-        alert('Error: Amount must be a price (without $)');
-        e.preventDefault();
-      }
-    });
-
-  });
-
-</script>
-
-
 <div id="notes">
   <h3>Notes</h3>
   <% form_for :note, @note, :url => { :action => :create_note, :id => @member.id } do |f| %>
@@ -73,6 +56,8 @@ date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y"
     <%= submit_tag "Add note" %>
   <% end -%>
 
+  <br/>
+  <div id="notes_msg"></div>
   <br/>
   <% if @notes.length > 0 %>
     <h3>Current notes</h3>
@@ -91,7 +76,7 @@ date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y"
 
 
 <div id="payments">
-  <h3>Payments - <% if @paid %><span class="paid">Paid</span><%else%><span class="unpaid">Unpaid</span><%end%></h3>
+  <h3>Payments - <% if @paid %><span class="paid_status paid">Paid</span><%else%><span class="paid_status unpaid">Unpaid</span><%end%></h3>
   <% form_for :payment, @payment, :url => { :action => :create_payment, :id => @member.id }, :html => { :id => "record_subs_payment"} do |f| %>
     <label for="year">Year</label>  
     <%= f.select :year, @year_options, { :selected => @current_year } %><br/>
@@ -109,21 +94,110 @@ date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y"
     <%= submit_tag "Record payment" %>
   <% end -%>
   <br/>
-  <% if @payments.length > 0%>
-    <h3>Recorded payments</h3>
-    <div id="payments_list">
+  <div id="payments_msg"></div>
+  <br/>
+  <h3>Recorded payments</h3>
+  <div id="payments_list">
+    <% if @payments.length > 0%>
       <% @payments.each do |payment| %>
+        <span>
         on <%= payment.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
         $<%= payment.amount %>
         <% if payment.partial %>
            <span class="partial">(partial)</span>
          <% end %>
-         for <%= payment.year %> by <%= payment.method %>, recorded by <%= User.find(payment.user_id).name %> <%= link_to 'remove', {:action => 'delete_payment', :id => payment.id} -%>
+         for <%= payment.year %> by <%= payment.method %>, recorded by <%= User.find(payment.user_id).name %> <%= link_to 'remove', {:action => 'delete_payment', :id => payment.id}, { :class => :remove } -%>
         <br/><br/>
+         </span>
       <% end %>
-    </div>
-  <% else %>
-    No payments currently recorded
-  <% end %>
+    <% else %>
+      <span class="msg no_payments">No payments currently recorded</span>
+    <% end %>
+  </div>
 </div>
 
+<script>
+  $(document).ready(function(){
+
+    $("#notes form").submit(function(){
+      $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: $(this).attr('action'),
+        data: $(this).serialize(), 
+        success: function(data) {
+          note_html = "<span class='added'>on "+data.on+" by "+data.by+"<br/>"+data.content+"</span><br/><br/>";
+          $("#notes_list").prepend(note_html);
+          $("#notes_msg").text("Note added");
+          $("#note_content").val("");
+        }
+      });
+      return false;
+    });
+
+    $("#payments form").submit(function(){
+      payment_amount = $(this).find('#payment_amount').val().replace(/\$/g,"");
+      if ( payment_amount != "" && isNaN(parseFloat(payment_amount)) ) {
+        alert('Error: Amount must be a price (without $)');
+        return false;
+      }
+
+      $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: $(this).attr('action'),
+        data: $(this).serialize(), 
+        success: function(data) {
+          note_html = "<span class='added'>on "+data.note.on+" by "+data.note.by+"<br/>"+data.note.content+"</span><br/><br/>";
+          $("#notes_list").prepend(note_html);
+
+          payment_html = "<span class='added'>on "+data.payment.on+"<br/>$"+data.payment.amount;
+          if (data.payment.partial)
+            payment_html += " <span class='partial'>(partial)</span> ";
+            payment_html += " for "+data.payment.year+" by "+data.payment.by+", recorded by "+data.payment.recorded_by+" <a class='remove' href='/member/delete_payment/"+data.payment.id+"'>remove</a><br/><br/></span>";
+          $("#payments_list span.msg.no_payments").remove();
+          $("#payments_list").prepend(payment_html);
+          $("#payments_msg").text("Payment and note added");
+
+          $("#payments .paid_status").removeClass("paid unpaid");
+          if (data.paid) {
+            $("#payments .paid_status").addClass("paid").text("Paid");
+          } else {
+            $("#payments .paid_status").addClass("unpaid").text("Unpaid");
+          }
+        }
+      });
+      return false;
+    });
+
+    $("#payments_list a.remove").live("click", function(){
+      if (confirm("Delete this payment?")) {
+        payment = $(this).parent();
+        $.ajax({
+          type: 'post',
+          dataType: 'json',
+          url: $(this).attr('href'),
+          success: function(data) {
+            payment.fadeOut("slow",function(){
+              $(this).remove();
+              note_html = "<span class='added'>on "+data.note.on+" by "+data.note.by+"<br/>"+data.note.content+"</span><br/><br/>";
+              $("#notes_list").prepend(note_html);
+              $("#payments_msg").text(data.message+" and note added");
+              if ( $("#payments_list span").length == 0 ) {
+                $("#payments_list").append("<span class='msg no_payments'>No payments currently recorded</span>");
+              }
+              $("#payments .paid_status").removeClass("paid unpaid");
+              if (data.paid) {
+                $("#payments .paid_status").addClass("paid").text("Paid");
+              } else {
+                $("#payments .paid_status").addClass("unpaid").text("Unpaid");
+              }
+            });
+          }
+        });
+      }
+      return false;
+    }); 
+
+  });
+</script>

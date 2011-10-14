@@ -108,8 +108,15 @@ class MemberController < ApplicationController
                   @note.user_id = current_user.id
 		  @note.modification_time = Time.now
 		  @note.save
-		 flash[:notice] = "Note saved."
-                redirect_to :action => 'show', :id => @member
+                  respond_to do |format|
+                    format.html {
+		      flash[:notice] = "Note saved."
+                      redirect_to :action => 'show', :id => @member
+                    }
+                    format.json {
+                      render :json => { :on => @note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p"), :by => User.find(@note.user_id).name, :content => @note.content }
+                    }
+                  end
 
    end
    def list
@@ -442,10 +449,26 @@ class MemberController < ApplicationController
                   @note.content += " for "+@payment.year.to_s+" by "+@payment.method
 		  @note.save
 
-		 flash[:notice] = "Payment saved."
-                redirect_to :action => 'show', :id => @member
+                  @paid = false
+                  if (Payment.find(:all, :conditions => { :member_id => @member.id, :year => Time.now.strftime('%Y'), :partial => false }) != [])
+                    @paid = true
+                  end
 
+                  respond_to do |format|
+                    format.html {
+		      flash[:notice] = "Payment saved."
+                      redirect_to :action => 'show', :id => @member
+                    }
+                    format.json {
+                      render :json => { 
+                        :paid => @paid,
+                        :note => {:on => @note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p"), :by => User.find(@note.user_id).name, :content => @note.content },
+                        :payment => { :on => @payment.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p"), :amount => @payment.amount.to_s, :partial => @payment.partial, :year => @payment.year, :by => @payment.method, :recorded_by => User.find(@payment.user_id).name, :id => @payment.id }
+                      }
+                    }
+                  end
    end
+
    def delete_payment
       @payment = Payment.find(params[:id])
       @payment.delete
@@ -459,8 +482,20 @@ class MemberController < ApplicationController
       @note.content += " for "+@payment.year.to_s+" by "+@payment.method
       @note.save
 
-      flash[:notice] = "Payment removed."
-      redirect_to :action => 'show', :id => @payment.member_id
+      @paid = false
+      if (Payment.find(:all, :conditions => { :member_id => @payment.member_id, :year => Time.now.strftime('%Y'), :partial => false }) != [])
+        @paid = true
+      end
+
+      respond_to do |format|
+        format.html {
+          flash[:notice] = "Payment removed."
+          redirect_to :action => 'show', :id => @payment.member_id
+        }
+        format.json {
+          render :json => { :status => :ok, :message => "Payment removed", :paid => @paid, :note => { :on => @note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p"), :by => User.find(@note.user_id).name, :content => @note.content } }
+        }
+      end
    end
    def payments
 	@member = Member.find(params[:id])
