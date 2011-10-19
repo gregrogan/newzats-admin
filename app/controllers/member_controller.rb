@@ -1,5 +1,13 @@
 class MemberController < ApplicationController
 
+  def mail_labels
+   @members = Member.find(:all, :conditions => ["deleted is NULL"])
+   @members = @members.sort_by { |m| m.list_name }
+    respond_to do |format|
+      format.pdf { render :layout => false }
+      prawnto :filename => "mail labels.pdf", :prawn => { :margin => [0, 10, 0, 24] }
+    end
+  end
    def csv
    	@members = Member.find(:all, :conditions => ["deleted is NULL"])
         @members = @members.sort_by { |m| m.list_name }
@@ -187,6 +195,7 @@ class MemberController < ApplicationController
 		  @note.member_id = @member.id
 		  @note.content = note_created_with(:member => @member)
 		  @note.modification_time = Time.now
+                  @note.user_id = current_user.id
 		  @note.save
 		 flash[:notice] = "Successfully saved."
 		redirect_to :action => 'list'
@@ -219,6 +228,7 @@ class MemberController < ApplicationController
 	     @note.member_id = @member.id
 	     @note.content = @note_content
 	     @note.modification_time = Time.now
+             @note.user_id = current_user.id
 	     @note.save
 	     flash[:notice] = "Successfully saved."
           end
@@ -236,6 +246,7 @@ class MemberController < ApplicationController
 	  @member.save
 	  @note = Note.new
 	  @note.member_id = @member.id
+          @note.user_id = current_user.id
 	  @note.content = '- deleted this member'
 	  @note.modification_time = Time.now
 	  @note.save
