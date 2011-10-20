@@ -18,36 +18,6 @@
   <a href="#" id="select_all"/>Select all</a><br/>
   <a href="#" id="select_none"/>Select none</a><br/>
   <br/><br/>
-<table id="members" class="sortable">
-  <tr>
-    <th></th>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Since</th>
-    <th>Paid?</th>
-  </tr>
-
-  <% @members = @members.sort_by { |m| m.list_name.downcase } %>
-
-  <% @members.each do |c| %>
-    <tr>
-      <td><input class="member" type="checkbox" name="member_id[]" value="<%=c.id%>" /></td>
-      <td nowrap="true">
-        <%= link_to "#{c.list_name}", {:controller => 'member', :action => 'show', :id => c.id} -%>
-      </td>
-      <td nowrap="true">
-        <%= Membershiptype.find(c.membershiptype_id).name %>
-      </td>
-      <td nowrap="true">
-        <%= c.created_at.strftime('%b %Y') %>
-      </td>
-      <td nowrap="true">
-        <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Time.now.strftime('%Y'), :partial => false }) != []) %>
-          Yes
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-
+  <% @checkbox = :true %>
+  <%= render "member_list", :locals => { :members => @members, :checkbox => @checkbox } %>
 <% end %>
