@@ -15,7 +15,7 @@
       <td nowrap="true">
         <%= link_to "#{c.list_name}", {:controller => 'member', :action => 'show', :id => c.id} -%>
       </td>
-      <td nowrap="true">
+      <td nowrap="true" title="<%= c.addr_1.empty? ? '' : c.addr_1 %><%= c.addr_2.empty? ? '' : ', '+c.addr_2 %><%= c.addr_3.empty? ? '' : ', '+c.addr_3 %><%= c.addr_4.empty? ? '' : ', '+c.addr_4 %><%= c.post_code.empty? ? '' : ', '+c.post_code %>">
         <% if c.region_id != nil %>
           <%= Region.find(:first, :conditions => { :id => c.region_id }).name %>
         <% end %>
