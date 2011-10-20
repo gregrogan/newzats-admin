@@ -33,7 +33,7 @@
       </td>
       <% n = Note.find(:first, :conditions => {:member_id => c.id}, :order => 'modification_time DESC' ) %>
       <td nowrap="true" title="<%= n.content %>">
-        <%= n.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %>
+        <%= n.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
       </td>
     </tr>
   <% end %>
