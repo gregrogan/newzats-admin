@@ -60,7 +60,7 @@ padding-top:20px;
 
 #page {
 background-color: #f0f0f0;
-width: 750px;
+width: 860px;
 margin: 0;
 margin-left: auto;
 margin-right: auto;
@@ -72,7 +72,7 @@ background-color: white;
 border: 3px solid #aaa;
 border-top: none;
 padding: 25px;
-width: 500px;
+width: 610px;
 }
 
 #sidebar {
@@ -247,7 +247,7 @@ a#member_delete {
 }
 
 #notes, #payments {
-  width: 240px;
+  width: 295px;
   height: 620px;
   float: left;
 }
@@ -284,7 +284,7 @@ a#member_delete {
 }
 
 #notes_list, #payments_list {
-  width: 230px;
+  width: 285px;
   overflow-y: auto;
 }
 

@@ -1,9 +1,11 @@
 <table id="members" class="sortable">
   <tr>
     <th>Name</th>
+    <th>Region</th>
     <th>Type</th>
     <th>Since</th>
     <th>Paid?</th>
+    <th>Last updated</th>
   </tr>
 
   <% @members = @members.sort_by { |m| m.list_name.downcase } %>
@@ -12,6 +14,11 @@
     <tr>
       <td nowrap="true">
         <%= link_to "#{c.list_name}", {:controller => 'member', :action => 'show', :id => c.id} -%>
+      </td>
+      <td nowrap="true">
+        <% if c.region_id != nil %>
+          <%= Region.find(:first, :conditions => { :id => c.region_id }).name %>
+        <% end %>
       </td>
       <td nowrap="true">
         <%= Membershiptype.find(c.membershiptype_id).name %>
@@ -23,6 +30,10 @@
         <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Time.now.strftime('%Y'), :partial => false }) != []) %>
           Yes
         <% end %>
+      </td>
+      <% n = Note.find(:first, :conditions => {:member_id => c.id}, :order => 'modification_time DESC' ) %>
+      <td nowrap="true" title="<%= n.content %>">
+        <%= n.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %>
       </td>
     </tr>
   <% end %>
