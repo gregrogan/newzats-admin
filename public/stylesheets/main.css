@@ -217,6 +217,10 @@ textarea#member_email_data {
 width: 90%;
 }
 
+table#members tr:hover {
+  background: #bbddee;
+}
+
 table.sortable th, td{
  text-align: left;
  white-space: nowrap;
