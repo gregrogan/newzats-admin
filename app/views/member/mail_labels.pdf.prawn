@@ -1,5 +1,4 @@
 @margins = [0, 10, 0, 24]
-#pdf.start_new_page(:margin => @margins)
 
 pdf.font_size 10
 
@@ -40,9 +39,9 @@ pdf.font_size 10
         end
         @box_counter+=1
 
-        pdf.stroke do
+        #pdf.stroke do
           #pdf.rectangle(pdf.bounds.top_left, b.width, b.height)
-        end
+        #end
 
       end
     end

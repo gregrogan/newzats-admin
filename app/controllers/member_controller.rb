@@ -1,7 +1,11 @@
 class MemberController < ApplicationController
 
-  def mail_labels
+  def pdf_print
    @members = Member.find(:all, :conditions => ["deleted is NULL"])
+  end
+  def mail_labels
+   #@members = Member.find(:all, :conditions => ["deleted is NULL"])
+   @members = Member.find(params[:member_id])
    @members = @members.sort_by { |m| m.list_name }
     respond_to do |format|
       format.pdf { render :layout => false }
