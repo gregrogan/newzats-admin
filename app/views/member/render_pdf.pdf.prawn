@@ -1,3 +1,5 @@
+if @document == "label" 
+
 @margins = [0, 10, 0, 24]
 
 pdf.font_size 10
@@ -54,3 +56,15 @@ pdf.font_size 10
 
 end
 
+elsif @document == "subs"
+
+@members.each do |m|
+
+pdf.text m.first_name
+
+pdf.start_new_page
+
+end
+
+
+end

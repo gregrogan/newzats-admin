@@ -3,14 +3,19 @@ class MemberController < ApplicationController
   def pdf_print
    @members = Member.find(:all, :conditions => ["deleted is NULL"])
   end
-  def mail_labels
-   #@members = Member.find(:all, :conditions => ["deleted is NULL"])
+  def render_pdf
    @members = Member.find(params[:member_id])
    @members = @members.sort_by { |m| m.list_name }
-    respond_to do |format|
-      format.pdf { render :layout => false }
+   respond_to do |format|
+    format.pdf { render :layout => false }
+    if params[:label]
+      @document = "label"
       prawnto :filename => "mail labels.pdf", :prawn => { :margin => [0, 10, 0, 24] }
+    elsif params[:subs]
+      @document = "subs"
+      prawnto :filename => "subs.pdf"
     end
+   end
   end
    def csv
    	@members = Member.find(:all, :conditions => ["deleted is NULL"])
