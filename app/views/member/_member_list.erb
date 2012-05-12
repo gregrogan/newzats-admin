@@ -1,6 +1,7 @@
 <table id="members" class="sortable">
   <tr>
     <% if @checkbox %><th></th><% end %>
+    <th>#</th>
     <th>Name</th>
     <th>Region</th>
     <th>Type</th>
@@ -14,6 +15,7 @@
   <% @members.each do |c| %>
     <tr>
       <% if @checkbox %><td><input class="member" type="checkbox" name="member_id[]" value="<%=c.id%>" /></td><% end %>
+      <td nowrap="true"><%=c.id%></td>
       <td nowrap="true">
         <%= link_to "#{c.list_name}", {:controller => 'member', :action => 'show', :id => c.id} -%>
       </td>

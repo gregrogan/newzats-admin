@@ -87,7 +87,8 @@ class MemberController < ApplicationController
           @term = '' if !@term #ensure term is not null so below find works
 	  @members = Member.find(:all, :conditions => [
 		"deleted is NULL AND 
-		(first_name like ? OR
+		(id like ? OR
+		 first_name like ? OR
 		 last_name like ? OR
 		 email like ? OR
 		 addr_1 like ? OR
@@ -100,6 +101,7 @@ class MemberController < ApplicationController
 		 phone_mobile like ? OR
 		 fax like ?
 		 )", 
+			"%"+@term+"%",
 			"%"+@term+"%",
 			"%"+@term+"%",
 			"%"+@term+"%",
