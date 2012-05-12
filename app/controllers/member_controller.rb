@@ -79,8 +79,54 @@ class MemberController < ApplicationController
             :disposition => "attachment; filename=newzats-members-" + @time + ".csv"
    end
    def email
-      @members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
-      @members = @members.sort_by { |m| m.list_name }
+      @type = params[:type]
+      @conditions = ""
+
+      @groups = Group.find(:all)
+      @regions = Region.find(:all)
+      @membershiptypes = Membershiptype.find(:all)
+      
+      @all_emailing_members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
+
+      @member_slice = Array.new
+@debug = ""
+      if (!@type || @type == 'all')
+        @member_slice = @all_emailing_members
+      elsif (@type == "paid")
+        @all_emailing_members.each do |m|
+          if (Payment.find(:all, :conditions => { :member_id => m.id, :year => Time.now.strftime('%Y'), :partial => false }) != [])
+            @member_slice << m
+          end
+        end
+      elsif (@type == "unpaid")
+        @all_emailing_members.each do |m|
+          if (Payment.find(:all, :conditions => { :member_id => m.id, :year => Time.now.strftime('%Y'), :partial => false }) == [])
+            @member_slice << m
+          end
+        end
+      elsif (@type.start_with?("group:"))
+        @group_id = @type.split(":").pop.to_i
+        @all_emailing_members.each do |m|
+          if (GroupsMember.find(:all, :conditions => { :group_id => @group_id, :member_id => m.id }) != [])
+            @member_slice << m
+          end
+        end
+      elsif (@type.start_with?("region:"))
+        @region_id = @type.split(":").pop.to_i
+        @all_emailing_members.each do |m|
+          if ( m.region_id == @region_id )
+            @member_slice << m
+          end
+        end
+      elsif (@type.start_with?("membershiptype:"))
+        @membershiptype_id = @type.split(":").pop.to_i
+        @all_emailing_members.each do |m|
+          if ( m.membershiptype_id == @membershiptype_id )
+            @member_slice << m
+          end
+        end
+      end
+      @members = @member_slice.sort_by { |m| m.list_name }
    end
    def search
 	  @term = params[:term]
