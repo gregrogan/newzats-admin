@@ -1,3 +1,5 @@
+require 'RMagick'
+
 class EventController < ApplicationController
    def list
       @events = Event.find(:all)
@@ -16,8 +18,10 @@ class EventController < ApplicationController
 	# create the file path
 	file_name = Time.now.to_f.to_s+File.extname(@file.original_filename)
 	path = File.join("public/uploads", file_name)
+	image = Magick::Image.from_blob(@file.read).first
+	resized_img = image.resize_to_fit(200, 200)
 	# write the file
-	File.open(path, "wb") { |f| f.write(@file.read) }
+	resized_img.write(path)
 	return file_name
    end
    def update
@@ -48,9 +52,9 @@ class EventController < ApplicationController
    end
    def delete
       @event = Event.find(params[:id])
-	  if (@event[:image_file] and File.exist?("#{RAILS_ROOT}/public/uploads/#{@event[:image_file]}"))
-		File.delete("#{RAILS_ROOT}/public/uploads/#{@event[:image_file]}")
-	  end
+	  #if (@event[:image_file] and File.exist?("#{RAILS_ROOT}/public/uploads/#{@event[:image_file]}"))
+		#File.delete("#{RAILS_ROOT}/public/uploads/#{@event[:image_file]}")
+	  #end
 	  @event.destroy
       flash[:notice] = "Event #{@event.title} deleted"
       redirect_to :action => 'list'

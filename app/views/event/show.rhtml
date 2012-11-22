@@ -12,7 +12,9 @@ Presenter: <%= @event.presenter %><br/>
 Where: <%= @event.where %><br/>
 When: <%= @event.when %><br/>
 
-image <img src="/uploads/<%= @event.image_file %>"/><br/>
+<% if @event.image_file %>
+	<br/><img src="/uploads/<%= @event.image_file %>"/><br/>
+<% end %>
 
 <br/>
 Adminitrator email: <%= @event.admin_email %><br/>
