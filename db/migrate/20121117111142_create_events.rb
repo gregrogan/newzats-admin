@@ -4,10 +4,13 @@ class CreateEvents < ActiveRecord::Migration
                 t.integer :id
 				t.string :title
 				t.string :presenter
-				t.string :location
-				t.string :date
-				t.
-				t.string :desc
+				t.string :where
+				t.string :when
+				t.string :image_file
+				t.string :admin_email
+				t.date :archive_date
+				t.text :intro
+				t.text :desc
          end
   end
 

@@ -1,0 +1,15 @@
+<% content_for :title do %>
+Edit event: <%= @event.title %>
+<% end %> 
+
+<%= error_messages_for :event %>
+
+<% form_for :event, @event, :url => { :action => :update, :id => @event.id }, :html => { :multipart => true } do |f| %>
+<%= render :partial => "form", :locals => { :f => f } %>
+<br/>
+
+<div id="commit">
+<%= submit_tag "Update" %>
+</div>
+
+<% end -%>

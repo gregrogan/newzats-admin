@@ -247,7 +247,7 @@ class MemberController < ApplicationController
 	  @regions = Region.find(:all)
 	  @membershiptypes = Membershiptype.find(:all)
 
-      if @member.save!
+      if @member.save
 	      @note = Note.new
 		  @note.member_id = @member.id
 		  @note.content = note_created_with(:member => @member)

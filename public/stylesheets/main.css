@@ -235,12 +235,12 @@ table.sortable th img {
   border:none;
 }
 
-a#member_edit {
+a#object_edit {
   float: left;
   font-size: 20px;
 }
 
-a#member_delete {
+a#object_delete {
   float: right;
   color: red;
 

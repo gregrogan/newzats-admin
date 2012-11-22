@@ -1,1 +1,1 @@
-jquery-1.6.2.min.js
+jquery-1.8.3.min.js

@@ -9,7 +9,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110930092555) do
+ActiveRecord::Schema.define(:version => 20121117111142) do
+
+  create_table "events", :force => true do |t|
+    t.string "title"
+    t.string "presenter"
+    t.string "where"
+    t.string "when"
+    t.string "image_file"
+    t.string "admin_email"
+    t.date   "archive_date"
+    t.text   "intro"
+    t.text   "desc"
+  end
 
   create_table "groups", :force => true do |t|
     t.string "name"

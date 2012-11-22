@@ -1,0 +1,14 @@
+<% content_for :title do %>
+Events list
+<% end %>
+<% if @events.blank? %>
+<p>There are no events currently in the system.</p>
+<% else %>
+<ul id="events">
+<% @events.each do |c| %>
+<li><%= link_to c.title, {:action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+
+<p><%= link_to "Add new event", {:action => 'new' }%></p>

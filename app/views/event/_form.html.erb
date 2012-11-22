@@ -1,0 +1,33 @@
+<label for="title">Title</label>
+<%= f.text_field :title %><br/>
+
+<label for="presenter">Presenter</label>
+<%= f.text_field :presenter %><br/>
+
+<label for="where">Where?</label>
+<%= f.text_field :where %><br/>
+
+<br/>
+<label for="when">When?</label>
+<%= f.text_field :when %><br/>
+
+<p><label for="image_file">Select image</label>
+<%= file_field :image_file, :datafile %>
+<%if @event.image_file%>
+	<br/><img src="/uploads/<%= @event.image_file %>"/>
+<%end%>
+
+
+<br/>
+<label for="admin_email">Administrator email</label>
+<%= f.text_field :admin_email %><br/>
+
+<label for="archive_date">Archive date</label>
+<%= f.text_field :archive_date, :class => :pickadate, :value => @event.pretty_archive_date %><br/>
+
+<label for="intro">Intro</label>
+<%= f.text_area :intro %><br/>
+
+<label for="desc">Description</label>
+<%= f.text_area :desc %><br/>
+

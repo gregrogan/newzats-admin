@@ -1,0 +1,25 @@
+<% content_for :title do %>
+Event: <%= @event.title %>
+<% end %> 
+
+<%= link_to :Edit, {:action => 'edit', :id => @event.id}, :id => "object_edit" -%>
+<%= link_to :Delete, {:action => 'delete', :id => @event.id}, { :id => "object_delete", :confirm => "Are you sure you wish to delete this event (#{@event.title})?" } -%>
+
+<br/><br/><br/>
+
+Presenter: <%= @event.presenter %><br/>
+<br/>
+Where: <%= @event.where %><br/>
+When: <%= @event.when %><br/>
+
+image <img src="/uploads/<%= @event.image_file %>"/><br/>
+
+<br/>
+Adminitrator email: <%= @event.admin_email %><br/>
+<br/>
+
+Archive date: <%= @event.pretty_archive_date %><br/>
+
+Intro: <%= @event.intro %><br/>
+<br/>
+Description: <%= @event.desc %><br/>
