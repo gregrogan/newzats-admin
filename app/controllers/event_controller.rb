@@ -35,7 +35,7 @@ class EventController < ApplicationController
   	    flash[:notice] = "Successfully saved."
 	    redirect_to :action => 'show', :id => @event
 	  else
-	    redirect_to :action => 'edit'
+	    redirect_to :action => 'edit', :id => @event
 	  end
    end
    def create

@@ -26,8 +26,8 @@
 <%= f.text_field :archive_date, :class => :pickadate, :value => @event.pretty_archive_date %><br/>
 
 <label for="intro">Intro</label>
-<%= f.text_area :intro %><br/>
+<%= f.text_area :intro, :class => :wysihtml5, :rows => "4", :cols => "60" %><br/>
 
 <label for="desc">Description</label>
-<%= f.text_area :desc %><br/>
+<%= f.text_area :desc, :class => :wysihtml5, :rows => "15", :cols => "60" %><br/>
 

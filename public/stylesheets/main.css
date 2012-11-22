@@ -16,7 +16,7 @@ color: #000;
 a  {color: #03c}
 a:hover {
 background-color: #03c;
-color: white;
+color: white !important;
 text-decoration: none;
 }
 
@@ -181,11 +181,11 @@ padding-top: 10px;
 padding-bottom: 10px;
 font-size: 11px;
 }
-#search input {
+#search {
 font-size: 11px;
 margin: 2px;
 }
-#search-text {width: 170px}
+#term {width: 170px}
 
 
 #sidebar ul {
@@ -306,4 +306,13 @@ a#object_delete {
 
 #notes_msg, #payments_msg {
   color: green;
+}
+
+.datepicker--holder {
+	margin-left: 200px;
+}
+
+.wysihtml5 {
+	width: auto;
+	margin-left: 200px;
 }

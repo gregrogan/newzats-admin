@@ -7,10 +7,15 @@
     <link href="/stylesheets/main.css" type="text/css" rel="stylesheet"/>
     <link href="/stylesheets/jquery-ui.css" type="text/css" rel="stylesheet"/>
     <link href="/stylesheets/pickadate.css" type="text/css" rel="stylesheet"/>
+    <link href="/stylesheets/bootstrap-wysihtml5-0.0.2.css" type="text/css" rel="stylesheet"/>
+	<link href="/stylesheets/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="/javascripts/sortable.js"></script>
     <script type="text/javascript" src="/javascripts/jquery.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui.js"></script>
     <script type="text/javascript" src="/javascripts/pickadate.min.js"></script>
+	<script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/javascripts/wysihtml5-0.3.0_rc2.min.js"></script>
+	<script type="text/javascript" src="/javascripts/bootstrap-wysihtml5-0.0.2.min.js"></script>
     <script type="text/javascript" src="/javascripts/application.js"></script>
   </head>
   <body>
@@ -24,7 +29,7 @@
 			  <li>
 			  <% form_tag '/member/search', :id => 'search' do %>
 				<%= text_field_tag :term, params[:term] %>
-				<%= submit_tag "Search" %> members
+				<%= submit_tag "Search members" %>
 			  <% end -%>
 			  </li>
 			
