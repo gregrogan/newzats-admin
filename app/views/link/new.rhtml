@@ -1,0 +1,15 @@
+<% content_for :title do %>
+Add link
+<% end %> 
+
+<%= error_messages_for :link %>
+
+<% form_for :link, @link, :url => { :action => :create }, :html => { :multipart => true } do |f| %>
+<%= render :partial => "form", :locals => { :f => f } %>
+<br/>
+
+<div id="commit">
+<%= submit_tag "Create" %>
+</div>
+
+<% end -%>

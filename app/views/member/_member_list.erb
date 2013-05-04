@@ -3,7 +3,7 @@
     <% if @checkbox %><th></th><% end %>
     <th>#</th>
     <th>Name</th>
-    <th>Region</th>
+    <th>Area</th>
     <th>Type</th>
     <th>Since</th>
     <th>Paid?</th>
@@ -19,16 +19,20 @@
       <td nowrap="true">
         <%= link_to "#{c.list_name}", {:controller => 'member', :action => 'show', :id => c.id} -%>
       </td>
-      <td nowrap="true" title="<%= c.addr_1.empty? ? '' : c.addr_1 %><%= c.addr_2.empty? ? '' : ', '+c.addr_2 %><%= c.addr_3.empty? ? '' : ', '+c.addr_3 %><%= c.addr_4.empty? ? '' : ', '+c.addr_4 %><%= c.post_code.empty? ? '' : ', '+c.post_code %>">
-        <% if c.region_id != nil %>
-          <%= Region.find(:first, :conditions => { :id => c.region_id }).name %>
+      <td nowrap="true" title="<%= c.addr_1 ? c.addr_1 : '' %><%= c.addr_2 ? ', '+c.addr_2 : '' %><%= c.addr_3 ? ', '+c.addr_3 : '' %><%= c.addr_4 ? ', '+c.addr_4 : '' %><%= c.post_code ? ', '+c.post_code : '' %>">
+        <% if c.area_id && c.area_id != 0 %>
+          <%= Area.find(:first, :conditions => { :id => c.area_id }).name %>
         <% end %>
       </td>
       <td nowrap="true">
-        <%= Membershiptype.find(c.membershiptype_id).name %>
+		<% if c.membershiptype_id %>
+			<%= Membershiptype.find(c.membershiptype_id).name %>
+		<% end %>
       </td>
       <td nowrap="true">
-        <%= c.created_at.strftime('%b %Y') %>
+		<% if c.created_at %>
+			<%= c.created_at.strftime('%b %Y') %>
+		<% end %>
       </td>
       <td nowrap="true">
         <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Time.now.strftime('%Y'), :partial => false }) != []) %>
@@ -36,9 +40,13 @@
         <% end %>
       </td>
       <% n = Note.find(:first, :conditions => {:member_id => c.id}, :order => 'modification_time DESC' ) %>
-      <td nowrap="true" title="<%= n.content %>">
-        <%= n.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
-      </td>
+	  <% if n %>
+		<td nowrap="true">
+			<%= n.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
+		</td>
+	  <% else %>
+	    <td></td>
+	  <% end %>
     </tr>
   <% end %>
 </table>

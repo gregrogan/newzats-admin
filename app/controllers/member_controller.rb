@@ -1,7 +1,7 @@
 class MemberController < ApplicationController
 
   def pdf_print
-   @members = Member.find(:all, :conditions => ["deleted is NULL"])
+   @members = Member.find(:all, :conditions => ["deleted != 1"])
   end
   def render_pdf
    @members = Member.find(params[:member_id])
@@ -18,7 +18,7 @@ class MemberController < ApplicationController
    end
   end
    def csv
-   	@members = Member.find(:all, :conditions => ["deleted is NULL"])
+   	@members = Member.find(:all, :conditions => ["deleted != 1"])
         @members = @members.sort_by { |m| m.list_name }
 	@groups = Array.new
 	Group.find(:all).each do |g|
@@ -38,7 +38,7 @@ class MemberController < ApplicationController
         end
     	csv_string = FasterCSV.generate do |csv|
     		# header row
-    		csv << ["ID", "First Name", "Middle Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Region", "Membership Type"] + @payment_years_header + @groups
+    		csv << ["ID", "First Name", "Middle Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Area", "Region", "Membership Type"] + @payment_years_header + @groups
 
     		# data rows
     		@members.each do |member|
@@ -66,10 +66,12 @@ class MemberController < ApplicationController
 				else @member_groups << ''
 				end
 			end
+ 			@member_area
+                       	@member_area = Area.find(member.area).name if member.area
  			@member_region
                        	@member_region = Region.find(member.region).name if member.region
 
-      			csv << [member.id, member.first_name, member.middle_name, member.last_name, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_region, Membershiptype.find(member.membershiptype_id).name] + @payments + @member_groups
+      			csv << [member.id, member.FirstName, member.MiddleName, member.LastName, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_area, @member_region, Membershiptype.find(member.membershiptype_id).name] + @payments + @member_groups
     		end
   	end
 	@time = Time.new.strftime("%d-%m-%Y")
@@ -83,10 +85,11 @@ class MemberController < ApplicationController
       @conditions = ""
 
       @groups = Group.find(:all)
+      @areas = Area.find(:all)
       @regions = Region.find(:all)
       @membershiptypes = Membershiptype.find(:all)
       
-      @all_emailing_members = Member.find(:all, :conditions => ["deleted is NULL AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
+      @all_emailing_members = Member.find(:all, :conditions => ["deleted != 1 AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
 
       @member_slice = Array.new
 @debug = ""
@@ -111,6 +114,13 @@ class MemberController < ApplicationController
             @member_slice << m
           end
         end
+      elsif (@type.start_with?("area:"))
+        @area_id = @type.split(":").pop.to_i
+        @all_emailing_members.each do |m|
+          if ( m.area_id == @area_id )
+            @member_slice << m
+          end
+        end
       elsif (@type.start_with?("region:"))
         @region_id = @type.split(":").pop.to_i
         @all_emailing_members.each do |m|
@@ -132,10 +142,10 @@ class MemberController < ApplicationController
 	  @term = params[:term]
           @term = '' if !@term #ensure term is not null so below find works
 	  @members = Member.find(:all, :conditions => [
-		"deleted is NULL AND 
-		(id like ? OR
-		 first_name like ? OR
-		 last_name like ? OR
+		"deleted != 1 AND 
+		(UserId like ? OR
+		 FirstName like ? OR
+		 LastName like ? OR
 		 email like ? OR
 		 addr_1 like ? OR
 		 addr_2 like ? OR
@@ -185,7 +195,7 @@ class MemberController < ApplicationController
 
    end
    def list
-      @members = Member.find(:all, :conditions => ["deleted is NULL"])
+      @members = Member.find(:all, :conditions => ["deleted != 1"])
    end
    def show
       @member = Member.find(params[:id])
@@ -196,11 +206,11 @@ class MemberController < ApplicationController
 		redirect_to :action => 'list'
 	  end
 	  @has_any_address
-	  if (@member.addr_1 > '' || @member.addr_2 > '' || @member.addr_3 > '' || @member.addr_4 > '' || @member.post_code > '')
+	  if ((@member.addr_1 && @member.addr_1 > '') || (@member.addr_2 && @member.addr_2 > '') || (@member.addr_3 && @member.addr_3 > '') || (@member.addr_4 && @member.addr_4 > '') || (@member.post_code && @member.post_code > ''))
 		@has_any_address = 'true'
 	  end
 	  @has_any_phone
-	  if (@member.phone_work > '' || @member.phone_home > '' || @member.phone_mobile > '' || @member.fax > '')
+	  if ((@member.phone_work && @member.phone_work > '') || (@member.phone_home && @member.phone_home > '') || (@member.phone_mobile && @member.phone_mobile > '') || (@member.fax && @member.fax > ''))
 		@has_any_phone = 'true'
 	  end
 
@@ -238,16 +248,28 @@ class MemberController < ApplicationController
    def new
       @member = Member.new
 	  @groups = Group.find(:all)
+	  @areas = Area.find(:all)
 	  @regions = Region.find(:all)
 	  @membershiptypes = Membershiptype.find(:all)
    end
    def create
       @member = Member.new(params[:member])
+	  @member.DateInserted = Time.now
+	  @member.Name = @member.full_name
+	  @member.Password = " "
+	  
 	  @groups = Group.find(:all)
+	  @areas = Area.find(:all)
 	  @regions = Region.find(:all)
 	  @membershiptypes = Membershiptype.find(:all)
 
+ 	  if (params[:Photo])
+		@member[:Photo] = save_profile_photo_upload(:file => params[:Photo][:datafile], :width => 200, :height => 200)
+	  end
+	  
       if @member.save
+		  member_role_id = ActiveRecord::Base.connection.execute("select RoleID from GDN_Role where Name='Member'").fetch_row[0]
+		  ActiveRecord::Base.connection.execute("insert into GDN_UserRole(UserID,RoleID) values ("+@member.id.to_s+","+member_role_id+")")
 	      @note = Note.new
 		  @note.member_id = @member.id
 		  @note.content = note_created_with(:member => @member)
@@ -263,10 +285,15 @@ class MemberController < ApplicationController
    def edit
       @member = Member.find(params[:id])
 	  @groups = Group.find(:all)
+	  @areas = Area.find(:all)
 	  @regions = Region.find(:all)
 	  @membershiptypes = Membershiptype.find(:all)
+	  @selected_area
+	  if @member.area_id
+		@selected_area = Area.find(@member.area_id)
+	  end
 	  @selected_region
-	  if @member.region_id
+	  if @member.region_id && @member.region_id != 0
 		@selected_region = Region.find(@member.region_id)
 	  end
 	  @selected_membershiptype
@@ -276,11 +303,18 @@ class MemberController < ApplicationController
    end
    def update
       @member = Member.find(params[:id])
+	  @member.Name = params[:member][:FirstName]+" "+params[:member][:LastName]
+	  @member.DateUpdated = Time.now
       @orig_member = Member.find(params[:id])
       @orig_groups_member = GroupsMember.find(:all, :conditions => { :member_id => @member.id })
+	  
+	  if (params[:Photo])
+		@member[:Photo] = save_profile_photo_upload(:file => params[:Photo][:datafile], :width => 200, :height => 200)
+	  end
+	  
       if @member.update_attributes(params[:member])
 	  @note_content = note_what_has_changed(:orig_member => @orig_member, :member => @member, :orig_groups_member => @orig_groups_member)
-          if (@note_content > '')
+          if (@note_content)
 	     @note = Note.new
 	     @note.member_id = @member.id
 	     @note.content = @note_content
@@ -292,6 +326,7 @@ class MemberController < ApplicationController
           redirect_to :action => 'show', :id => @member
       else
 	  	  @groups = Group.find(:all)
+		  @areas = Area.find(:all)
 		  @regions = Region.find(:all)
 		  @membershiptypes = Membershiptype.find(:all)
          render :action => 'edit'
@@ -299,8 +334,9 @@ class MemberController < ApplicationController
    end
    def delete
       @member = Member.find(params[:id])
-	  @member.deleted = true
+	  @member.Deleted = true
 	  @member.save
+	  ActiveRecord::Base.connection.execute("delete from GDN_UserRole where UserID = "+@member.id.to_s)
 	  @note = Note.new
 	  @note.member_id = @member.id
           @note.user_id = current_user.id
@@ -319,13 +355,13 @@ class MemberController < ApplicationController
 	@change
 	@changes = ''
 	
-	@change = add_rem_change(:orig => @orig_member.first_name, :new => @member.first_name, :field_name => 'First Name')
+	@change = add_rem_change(:orig => @orig_member.FirstName, :new => @member.FirstName, :field_name => 'First Name')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
-	@change = add_rem_change(:orig => @orig_member.middle_name, :new => @member.middle_name, :field_name => 'Middle Name')
+	@change = add_rem_change(:orig => @orig_member.MiddleName, :new => @member.MiddleName, :field_name => 'Middle Name')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
-	@change = add_rem_change(:orig => @orig_member.last_name, :new => @member.last_name, :field_name => 'Last Name')
+	@change = add_rem_change(:orig => @orig_member.LastName, :new => @member.LastName, :field_name => 'Last Name')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
 	@change = add_rem_change(:orig => @orig_member.email, :new => @member.email, :field_name => 'Email')
@@ -333,6 +369,16 @@ class MemberController < ApplicationController
 
 	if @orig_member.email_invalid != @member.email_invalid
 		@changes.concat("- Email address invalid changed from #{@orig_member.email_invalid} to #{@member.email_invalid}<br/>")
+	end
+
+	@change = add_rem_change(:orig => @orig_member.website, :new => @member.website, :field_name => 'Website')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	@change = add_rem_change(:orig => @orig_member.bio, :new => @member.bio, :field_name => 'Bio')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	if @orig_member.Photo != @member.Photo
+		@changes.concat("- Photo <img class='profile' src='#{ApplicationController.new.newzats_members_url+"/uploads/"+File.dirname(@member.Photo)+"/p"+File.basename(@member.Photo)}'/><br/>")
 	end
 	
 	@change = add_rem_change(:orig => @orig_member.addr_1, :new => @member.addr_1, :field_name => 'Address line 1')
@@ -362,12 +408,25 @@ class MemberController < ApplicationController
 	@change = add_rem_change(:orig => @orig_member.fax, :new => @member.fax, :field_name => 'Fax')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
-	if @orig_member.region_id
+	if @orig_member.area_id && @orig_member.area_id != 0
+		@orig_val = Area.find(@orig_member.area_id).name
+	else
+		@orig_val = ''
+	end
+	if @member.area_id && @member.area_id != 0
+		@new_val = Area.find(@member.area_id).name
+	else
+		@new_val = ''
+	end
+	@change = add_rem_change(:orig => @orig_val, :new => @new_val, :field_name => 'Area')
+	@changes.concat("- #{@change}<br/>") if @change > ''
+
+	if @orig_member.region_id && @orig_member.region_id != 0
 		@orig_val = Region.find(@orig_member.region_id).name
 	else
 		@orig_val = ''
 	end
-	if @member.region_id
+	if @member.region_id && @member.region_id != 0
 		@new_val = Region.find(@member.region_id).name
 	else
 		@new_val = ''
@@ -426,10 +485,10 @@ class MemberController < ApplicationController
 	@orig = args[:orig]
 	@new = args[:new]
 	@field_name = args[:field_name]
-	if @orig != @new
-		if @orig == '' && @new > ''
+	if (@orig || "") != (@new || "")
+		if @orig == '' && @new
 			return "added #{@field_name} #{@new}"
-		elsif @orig > '' && @new == ''
+		elsif @orig && @new == ''
 			return "removed #{@field_name} (was #{@orig})"
 		else
 			return "#{@field_name} changed from #{@orig} to #{@new}"
@@ -442,19 +501,28 @@ class MemberController < ApplicationController
    def note_created_with(args)
 	@member = args[:member]
 	@creates = ''
-	if @member.first_name > ''
-		@creates.concat("- first name is #{@member.first_name}<br/>")
+	if @member.FirstName > ''
+		@creates.concat("- first name is #{@member.FirstName}<br/>")
 	end
-	if @member.middle_name > ''
-		@creates.concat("- middle name is #{@member.middle_name}<br/>")
+	if @member.MiddleName > ''
+		@creates.concat("- middle name is #{@member.MiddleName}<br/>")
 	end
-	if @member.last_name > ''
-		@creates.concat("- last name is #{@member.last_name}<br/>")
+	if @member.LastName > ''
+		@creates.concat("- last name is #{@member.LastName}<br/>")
 	end
 	if @member.email > ''
 		@creates.concat("- email is #{@member.email}<br/>")
 	end
 	@creates.concat("- email address invalid is #{@member.email_invalid}<br/>")
+	if @member.website > ''
+		@creates.concat("- website is #{@member.website}<br/>")
+	end
+	if @member.bio > ''
+		@creates.concat("- bio is #{@member.bio}<br/>")
+	end
+	if @member.Photo
+		@creates.concat("- photo is <img class='profile' src='#{ApplicationController.new.newzats_members_url+"/uploads/"+File.dirname(@member.Photo)+"/p"+File.basename(@member.Photo)}'/><br/>")
+	end
 	if @member.addr_1 > ''
 		@creates.concat("- Address line 1 is #{@member.addr_1}<br/>")
 	end
@@ -481,6 +549,9 @@ class MemberController < ApplicationController
 	end
 	if @member.fax > ''
 		@creates.concat("- Fax is #{@member.fax}<br/>")
+	end
+	if @member.area_id
+		@creates.concat("- Area is #{Area.find(@member.area_id).name}<br/>")
 	end
 	if @member.region_id
 		@creates.concat("- Region is #{Region.find(@member.region_id).name}<br/>")

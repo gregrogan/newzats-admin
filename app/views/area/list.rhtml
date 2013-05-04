@@ -1,0 +1,14 @@
+<% content_for :title do %>
+Areas list
+<% end %>
+<% if @areas.blank? %>
+<p>There are no areas currently in the system.</p>
+<% else %>
+<ul id="areas">
+<% @areas.each do |c| %>
+<li><%= link_to c.name, {:action => 'show', :id => c.id} -%></li>
+<% end %>
+</ul>
+<% end %>
+
+<p><%= link_to "Add new area", {:action => 'new' }%></p>

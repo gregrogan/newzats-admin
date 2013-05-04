@@ -13,12 +13,27 @@ class ApplicationController < ActionController::Base
   # From authlogic  
   filter_parameter_logging :password, :password_confirmation  
   helper_method :current_user_session, :current_user  
+
+  def newzats_members_url
+	if Rails.env == "development"
+	  return "http://newzatsdev.gregrogan.com/members"
+	elsif Rails.env == "production"
+	  return "http://newzats.org.nz/members"
+	end
+  end
+  
+  def newzats_members_path
+	if Rails.env == "development"
+	  return "/var/www/newzatsdev/members"
+	elsif Rails.env == "production"
+	  return "/var/www/newzats/members"
+	end
+  end
   
   private  
   def current_user_session  
     @current_user_session ||= UserSession.find  
   end  
-  
   def current_user  
     @current_user ||= current_user_session && current_user_session.user  
   end  
@@ -38,4 +53,47 @@ class ApplicationController < ActionController::Base
       redirect_to :action => 'new', :controller => 'user_sessions' 
     end
   end
+  def save_image_upload(args)
+  @file = args[:file]
+  # create the file path
+  folder = "/uploads/"
+  file_name = folder+@file.original_filename
+  original_filename = file_name
+  i = 1
+  while File.exist?("public"+file_name)
+  	file_name = original_filename.gsub(/\.(.)+$/,"_#{i}#{File.extname(file_name)}")
+  	i += 1
+  end
+  image = Magick::Image.from_blob(@file.read).first
+  resized_img = image.resize_to_fit(args[:width], args[:height])
+  # write the file
+  resized_img.write("public"+file_name)
+  return file_name
+  end
+
+  
+  def save_profile_photo_upload(args)
+  @file = args[:file]
+
+  file_name = @file.original_filename
+  original_filename = file_name
+  i = 1
+  while File.exist?(ApplicationController.new.newzats_members_path+"/uploads/userpics/p"+file_name)
+  	file_name = original_filename.gsub(/\.(.)+$/,"_#{i}#{File.extname(file_name)}")
+  	i += 1
+  end
+  image = Magick::Image.from_blob(@file.read).first
+  resized_img = image.resize_to_fit(args[:width], args[:height])
+
+  # write the file
+  resized_img.write(ApplicationController.new.newzats_members_path+"/uploads/userpics/p"+file_name)
+
+  # resized thumbnail for vanilla
+  resized_img = image.resize_to_fit('40', '40')
+  resized_img.write(ApplicationController.new.newzats_members_path+"/uploads/userpics/n"+file_name)
+  
+  file_name = "userpics/"+file_name;
+  return file_name
+  end
+  
 end

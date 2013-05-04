@@ -3,9 +3,11 @@ All Notes
 <% end %> 
 <ul id='all_notes'>
 <% @notes.each do |note| %>
-<li>
-<%= link_to "#{ Member.find(note.member_id).first_name+' '+Member.find(note.member_id).last_name}", {:controller => :member, :action => 'show', :id => note.member_id} %> on <%= note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %>, by <%= User.find(note.user_id).name %><br/>
-<%= note.content %>
-</li>
+<% if Member.exists?(note.member_id)%>
+	<li>
+		<%= link_to "#{ Member.find(note.member_id).first_name+' '+Member.find(note.member_id).last_name}", {:controller => :member, :action => 'show', :id => note.member_id} %> on <%= note.modification_time.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %>, by <%= User.find(note.user_id).name %><br/>
+		<%= note.content %>
+	</li>
+<% end %>	
 <% end %>
 </ul>

@@ -44,20 +44,23 @@
 				  <li><%= link_to "Printing", {:action => :pdf_print, :controller => :member} -%></li>
 				</ul>
 			  </li>
-
+<!--
 			  <li>
 				<h3>Website functions</h3>
 				<ul class="links">
 				  <li><%= link_to "Add Event", {:action => :new, :controller => :event} -%></li>
 				  <li><%= link_to "Events list", {:action => :list, :controller => :event} -%></li>
+				  <li><%= link_to "Add Link", {:action => :new, :controller => :link} -%></li>
+				  <li><%= link_to "Links list", {:action => :list, :controller => :link} -%></li>
 				</ul>
 			  </li>
-
+-->
 			  <li>
 				<h3>Setup</h3>
 				<ul class="links">
 				  <li><%= link_to "Groups", {:action => :list, :controller => :group} -%></li>
 				  <li><%= link_to "Regions", {:action => :list, :controller => :region} -%></li>
+				  <li><%= link_to "Areas", {:action => :list, :controller => :area} -%></li>
 				  <li><%= link_to "Membership types", {:action => :list, :controller => :membershiptype} -%></li>
 				</ul>
 			  </li>

@@ -13,22 +13,11 @@ class EventController < ApplicationController
    def edit
       @event = Event.find(params[:id])
    end
-   def save_file(args)
-	@file = args[:file]
-	# create the file path
-	file_name = Time.now.to_f.to_s+File.extname(@file.original_filename)
-	path = File.join("public/uploads", file_name)
-	image = Magick::Image.from_blob(@file.read).first
-	resized_img = image.resize_to_fit(200, 200)
-	# write the file
-	resized_img.write(path)
-	return file_name
-   end
    def update
       @event = Event.find(params[:id])
 	  @updated_event = params[:event]
 	  if (params[:image_file])
-		@updated_event[:image_file] = save_file(:file => params[:image_file][:datafile])
+		@updated_event[:image_file] = save_image_upload(:file => params[:image_file][:datafile], :width => 200, :height => 200)
 	  end
 
       if @event.update_attributes(@updated_event)
@@ -41,7 +30,7 @@ class EventController < ApplicationController
    def create
       @event = Event.new(params[:event])
 	  if (params[:image_file])
-		@event[:image_file] = save_file(:file => params[:image_file][:datafile])
+		@event[:image_file] = save_image_upload(:file => params[:image_file][:datafile], :width => 200, :height => 200)
 	  end
       if @event.save
 		 flash[:notice] = "Successfully created event #{@event.title}"

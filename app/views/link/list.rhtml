@@ -1,0 +1,16 @@
+<% content_for :title do %>
+  Link list 
+<% end %>
+<% if @links.blank? %>
+<p>There are no links currently in the system.</p>
+<% else %>
+<ul id="links">
+<% @links.each do |c| %>
+	<li>
+	<%= link_to 'Edit', {:action => 'edit', :id => c.id} -%> | <%= link_to 'Delete', {:action => 'delete', :id => c.id}, {:confirm => "Are you sure you wish to delete link #{c.name}?"} -%> <a href="<%=c.url%>" target="_blank"><img src="<%=c.icon%>"/></a> <a href="<%=c.url%>" target="_blank"><%=c.name%></a><br/><%=c.desc%>
+	</li>
+<% end %>
+</ul>
+<% end %>
+
+<p><%= link_to "Add new link", {:action => 'new' }%></p>

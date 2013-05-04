@@ -8,6 +8,7 @@ Email members
   <option <%if @type == "unpaid"%>selected="selected"<%end%> value="unpaid">Unpaid</option>
   <option <%if @type == "paid"%>selected="selected"<%end%> value="paid">Paid</option>
   <% @groups.each do |g| %><option <%if @type == "group:"+g.id.to_s%>selected="selected"<%end%> value="group:<%=g.id%>">Group: <%=g.name%></option><% end %>
+  <% @areas.each do |r| %><option <%if @type == "area:"+r.id.to_s%>selected="selected"<%end%> value="area:<%=r.id%>">Area: <%=r.name%></option><% end %>
   <% @regions.each do |r| %><option <%if @type == "region:"+r.id.to_s%>selected="selected"<%end%> value="region:<%=r.id%>">Region: <%=r.name%></option><% end %>
   <% @membershiptypes.each do |m| %><option <%if @type == "membershiptype:"+m.id.to_s%>selected="selected"<%end%> value="membershiptype:<%=m.id%>">Type: <%=m.name%></option><% end %>
 </select>

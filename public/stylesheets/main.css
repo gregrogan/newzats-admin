@@ -185,7 +185,7 @@ font-size: 11px;
 font-size: 11px;
 margin: 2px;
 }
-#term {width: 170px}
+#term {width: 140px}
 
 
 #sidebar ul {
@@ -233,6 +233,10 @@ table.sortable th a {
 
 table.sortable th img {
   border:none;
+}
+
+a#object_edit, a#object_delete {
+	padding: 5px;
 }
 
 a#object_edit {
@@ -296,6 +300,11 @@ a#object_delete {
   height: 400px;
 }
 
+#notes_list img.profile,
+#all_notes img.profile {
+	width: 50px;
+}
+
 #notes_list .added, #payments_list .added {
   background-color: lightblue;
 }
@@ -315,4 +324,34 @@ a#object_delete {
 .wysihtml5 {
 	width: auto;
 	margin-left: 200px;
+}
+
+#links li {
+	list-style-type: none;
+}
+
+#links li a:hover{
+	color: #08C !important;
+	background-color: white;
+}
+
+#profile {
+	margin-bottom: 20px;
+}
+
+.right-panel{
+	float: right;
+	padding: 10px;
+	margin: 10px;
+	position: relative;
+	top: -40px;
+}
+
+.bio{
+	border-left: 1px solid #ccc;	
+	width: 100%;
+	padding: 10px;
+	width: 377px;
+	height: 180px;
+	overflow-y: scroll;
 }

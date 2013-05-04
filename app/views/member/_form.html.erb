@@ -1,20 +1,34 @@
-<label for="first_name">First Name</label>
-<%= f.text_field :first_name %><br/>
+<label for="FirstName">First Name</label>
+<%= f.text_field :FirstName %><br/>
 
-<label for="middle_name">Middle Name</label>
-<%= f.text_field :middle_name %><br/>
+<label for="MiddleName">Middle Name</label>
+<%= f.text_field :MiddleName %><br/>
 
-<label for="last_name">Last Name</label>
-<%= f.text_field :last_name %><br/>
+<label for="LastName">Last Name</label>
+<%= f.text_field :LastName %><br/>
 
 <br/>
-<label for="email">Email</label>
-<%= f.text_field :email %><br/>
+<label for="Email">Email</label>
+<%= f.text_field :Email %><br/>
 
 <label for="email_invalid">Email address invalid?</label>
 <%= f.check_box :email_invalid %><br/>
-
 <br/>
+
+<label for="Photo">Profile photo</label>
+<%= file_field :Photo, :datafile %><br/>
+<% if @member.Photo %>
+	<% @profile_file = File.dirname(@member.Photo)+"/p"+File.basename(@member.Photo) %>
+	<label></label>
+	<img style="display:block;" src="<%=ApplicationController.new.newzats_members_url+"/uploads/"+@profile_file%>"/><br/>
+<% end %>
+
+<label for="website">Website</label>
+<%= f.text_field :website %><br/>
+
+<label for="bio">Bio</label>
+<%= f.text_area :bio, :class => :wysihtml5, :rows => "10", :cols => "60" %><br/>
+
 <label for="addr_1">Address line 1</label>
 <%= f.text_field :addr_1 %><br/>
 
@@ -42,6 +56,10 @@
 
 <label for="fax">Fax</label>
 <%= f.text_field :fax %><br/>
+
+<br/>
+<label for="area">Area</label>
+<%= collection_select :member, :area_id, @areas, :id, :name, options ={:include_blank => :true } %><br/>
 
 <br/>
 <label for="region">Region</label>

@@ -1,0 +1,14 @@
+<label for="name">Name</label>
+<%= f.text_field :name %><br/>
+
+<label for="url">URL</label>
+<%= f.text_field :url %><br/>
+
+<p><label for="icon">Select icon</label>
+<%= file_field :icon, :datafile %><br/>
+<%if @link.icon%>
+	<label></label><img src="<%= @link.icon %>"/><br/>
+<%end%>
+
+<label for="desc">Short description</label>
+<%= f.text_field :desc %><br/>

@@ -1,9 +1,11 @@
 class Member < ActiveRecord::Base
+  set_table_name "GDN_User"
+  set_primary_key "UserID"
   has_many :groups_members
   has_many :groups, :through => :groups_members
   belongs_to :membership_type
-  belongs_to :region
-  validates_presence_of :first_name
+  belongs_to :area
+  validates_presence_of :FirstName
   validates_presence_of :membershiptype_id
   
   validates_format_of :email,
@@ -12,15 +14,39 @@ class Member < ActiveRecord::Base
 	:message => 'must be valid e.g someone@something.com'
   has_many :notes
 
-  def full_name
-    [first_name, last_name].join(' ')
+  def first_name
+	self.FirstName
   end
 
+  def middle_name
+	self.MiddleName
+  end
+
+  def last_name
+	self.LastName
+  end
+  
+  def full_name
+    [self.FirstName, self.LastName].join(' ')
+  end
+
+  def deleted
+	if self.Deleted == 0
+		return false
+	else
+		return true
+	end
+  end
+  
+  def email
+	self.Email
+  end
+  
   def list_name
-    if last_name == ''
-      first_name
+    if self.LastName == ''
+      self.FirstName
     else
-      [last_name, first_name].join(', ')
+      [self.LastName, self.FirstName].join(', ')
     end
   end
 

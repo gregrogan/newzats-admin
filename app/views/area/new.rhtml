@@ -1,0 +1,13 @@
+<% content_for :title do %>
+Add area
+<% end %> 
+<% form_for :area, @area, :url => { :action => :create } do |f| %>
+
+<p><label for="area_name">Area Name</label>
+<%= f.text_field :name %></p>
+
+<div id="commit">
+<%= submit_tag "Create" %>
+</div>
+
+<% end -%>

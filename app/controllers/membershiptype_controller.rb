@@ -4,7 +4,7 @@ class MembershiptypeController < ApplicationController
    end
    def show
 	  @membershiptype = Membershiptype.find(params[:id])
-	  @membershiptype_members = Member.find(:all, :conditions => { :membershiptype_id => @membershiptype.id }, :order => :last_name)
+	  @membershiptype_members = Member.find(:all, :conditions => { :membershiptype_id => @membershiptype.id }, :order => :LastName)
 	  @members = Array.new
 	  @membershiptype_members.each do |rm|
 	    if !(rm.deleted)

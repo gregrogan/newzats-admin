@@ -12,9 +12,9 @@
 <%= f.text_field :when %><br/>
 
 <p><label for="image_file">Select image</label>
-<%= file_field :image_file, :datafile %>
+<%= file_field :image_file, :datafile %><br/>
 <%if @event.image_file%>
-	<br/><img src="/uploads/<%= @event.image_file %>"/>
+	<label></label><img src="<%= @event.image_file %>"/><br/>
 <%end%>
 
 

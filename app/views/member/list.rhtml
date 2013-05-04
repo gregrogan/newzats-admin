@@ -5,7 +5,7 @@
 <p>There are no members currently in the system.</p>
 <% else %>
   <p>To order by a column, click the column name.<br/>
-  Hovering over Region shows the address, hoverion over last updated show the note<br/>
+  Hovering over Area shows the address, hoverion over last updated show the note<br/>
   The # column is the member number (also know as member ID)</p>
   <p>Current member count: <%= @members.count %></p>
   <%= render "member_list", :locals => { :members => @members } %>

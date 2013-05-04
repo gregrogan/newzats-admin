@@ -1,0 +1,16 @@
+<% content_for :title do %>
+View area
+<% end %> 
+<h1><%= @area.name %></h1>
+<% if @members.blank? %>
+<p>No members currently in this area.</p>
+<% else %>
+  Members:<br/>
+  <%= render "member/member_list", :locals => { :members => @members } %>
+<% end %>
+<br/>
+<% if @members.blank? %>
+<%= link_to :Delete, {:action => 'delete', :id => @area.id} -%>
+<% else %>
+Note: This area can only be deleted if associated members are removed
+<% end %>

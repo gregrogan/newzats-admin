@@ -13,7 +13,7 @@ Where: <%= @event.where %><br/>
 When: <%= @event.when %><br/>
 
 <% if @event.image_file %>
-	<br/><img src="/uploads/<%= @event.image_file %>"/><br/>
+	<br/><img src="<%= @event.image_file %>"/><br/>
 <% end %>
 
 <br/>
