@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130502132203) do
+ActiveRecord::Schema.define(:version => 20130505063918) do
 
   create_table "GDN_Activity", :primary_key => "ActivityID", :force => true do |t|
     t.integer  "CommentActivityID"
@@ -410,27 +410,25 @@ ActiveRecord::Schema.define(:version => 20130502132203) do
     t.integer  "CountBookmarks"
     t.string   "FirstName",                :limit => 50,                   :null => false
     t.string   "LastName",                 :limit => 50,                   :null => false
-    t.string   "MiddleName",               :limit => 50
     t.string   "addr_1"
     t.string   "addr_2"
     t.string   "addr_3"
     t.string   "addr_4"
+    t.boolean  "email_invalid"
     t.string   "post_code"
     t.string   "phone_work"
     t.string   "phone_home"
     t.string   "phone_mobile"
     t.string   "fax"
+    t.integer  "membershiptype_id"
     t.integer  "area_id"
+    t.integer  "region_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "membershiptype_id"
-    t.boolean  "email_invalid"
     t.string   "website"
     t.text     "bio"
     t.boolean  "show_profile_members"
     t.boolean  "show_profile_website"
-    t.datetime "DateAllViewed"
-    t.integer  "region_id"
   end
 
   add_index "GDN_User", ["Email"], :name => "IX_User_Email"
@@ -568,7 +566,7 @@ ActiveRecord::Schema.define(:version => 20130502132203) do
     t.integer "order"
   end
 
-  create_table "members_pre_vanilla_forums", :force => true do |t|
+  create_table "members_pre_vanilla", :force => true do |t|
     t.string   "first_name"
     t.string   "middle_name"
     t.string   "last_name"

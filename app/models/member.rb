@@ -18,10 +18,6 @@ class Member < ActiveRecord::Base
 	self.FirstName
   end
 
-  def middle_name
-	self.MiddleName
-  end
-
   def last_name
 	self.LastName
   end

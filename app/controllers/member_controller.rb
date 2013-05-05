@@ -38,7 +38,7 @@ class MemberController < ApplicationController
         end
     	csv_string = FasterCSV.generate do |csv|
     		# header row
-    		csv << ["ID", "First Name", "Middle Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Area", "Region", "Membership Type"] + @payment_years_header + @groups
+    		csv << ["ID", "First Name", "Last Name", "Address Line 1", "Address Line 2", "Address Line 3", "Address Line 4", "Post Code", "Email", "Email Invalid?", "Work Phone", "Home Phone", "Mobile Phone", "Fax", "Area", "Region", "Membership Type"] + @payment_years_header + @groups
 
     		# data rows
     		@members.each do |member|
@@ -71,7 +71,7 @@ class MemberController < ApplicationController
  			@member_region
                        	@member_region = Region.find(member.region).name if member.region
 
-      			csv << [member.id, member.FirstName, member.MiddleName, member.LastName, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_area, @member_region, Membershiptype.find(member.membershiptype_id).name] + @payments + @member_groups
+      			csv << [member.id, member.FirstName, member.LastName, member.addr_1, member.addr_2, member.addr_3, member.addr_4, member.post_code, member.email, @email_invalid, member.phone_work, member.phone_home, member.phone_mobile, member.fax, @member_area, @member_region, Membershiptype.find(member.membershiptype_id).name] + @payments + @member_groups
     		end
   	end
 	@time = Time.new.strftime("%d-%m-%Y")
@@ -358,9 +358,6 @@ class MemberController < ApplicationController
 	@change = add_rem_change(:orig => @orig_member.FirstName, :new => @member.FirstName, :field_name => 'First Name')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
-	@change = add_rem_change(:orig => @orig_member.MiddleName, :new => @member.MiddleName, :field_name => 'Middle Name')
-	@changes.concat("- #{@change}<br/>") if @change > ''
-
 	@change = add_rem_change(:orig => @orig_member.LastName, :new => @member.LastName, :field_name => 'Last Name')
 	@changes.concat("- #{@change}<br/>") if @change > ''
 
@@ -503,9 +500,6 @@ class MemberController < ApplicationController
 	@creates = ''
 	if @member.FirstName > ''
 		@creates.concat("- first name is #{@member.FirstName}<br/>")
-	end
-	if @member.MiddleName > ''
-		@creates.concat("- middle name is #{@member.MiddleName}<br/>")
 	end
 	if @member.LastName > ''
 		@creates.concat("- last name is #{@member.LastName}<br/>")
