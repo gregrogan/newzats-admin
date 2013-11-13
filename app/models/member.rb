@@ -8,10 +8,12 @@ class Member < ActiveRecord::Base
   validates_presence_of :FirstName
   validates_presence_of :membershiptype_id
   
-  validates_format_of :email,
+  validates_format_of :Email,
     :allow_blank => :true,
 	:with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i,
 	:message => 'must be valid e.g someone@something.com'
+
+
   has_many :notes
 
   def first_name

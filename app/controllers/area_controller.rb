@@ -4,7 +4,7 @@ class AreaController < ApplicationController
    end
    def show
 	  @area = Area.find(params[:id])
-	  @area_members = Member.find(:all, :conditions => { :area_id => @area.id })
+	  @area_members = Member.find(:all, :conditions => ["area_id=? AND "+leave_cond, @area.id ])
 	  @members = Array.new
 	  @area_members.each do |rm|
 	    if !(rm.deleted)

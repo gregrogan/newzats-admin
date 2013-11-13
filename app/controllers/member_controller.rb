@@ -1,7 +1,7 @@
 class MemberController < ApplicationController
 
   def pdf_print
-   @members = Member.find(:all, :conditions => ["deleted != 1"])
+   @members = Member.find(:all, :conditions => ["deleted != 1 and "+leave_cond])
   end
   def render_pdf
    @members = Member.find(params[:member_id])
@@ -89,7 +89,7 @@ class MemberController < ApplicationController
       @regions = Region.find(:all)
       @membershiptypes = Membershiptype.find(:all)
       
-      @all_emailing_members = Member.find(:all, :conditions => ["deleted != 1 AND (email_invalid is NULL OR email_invalid = 'f') AND email > ''"])
+      @all_emailing_members = Member.find(:all, :conditions => ["deleted != 1 AND (email_invalid is NULL OR email_invalid = 'f') AND email > '' and "+leave_cond])
 
       @member_slice = Array.new
 @debug = ""
@@ -142,7 +142,7 @@ class MemberController < ApplicationController
 	  @term = params[:term]
           @term = '' if !@term #ensure term is not null so below find works
 	  @members = Member.find(:all, :conditions => [
-		"deleted != 1 AND 
+		"deleted != 1 AND "+leave_cond+" AND 
 		(UserId like ? OR
 		 FirstName like ? OR
 		 LastName like ? OR
@@ -195,7 +195,7 @@ class MemberController < ApplicationController
 
    end
    def list
-      @members = Member.find(:all, :conditions => ["deleted != 1"])
+      @members = Member.find(:all, :conditions => ["deleted != 1 and "+leave_cond])
    end
    def show
       @member = Member.find(params[:id])
@@ -270,6 +270,7 @@ class MemberController < ApplicationController
       if @member.save
 		  member_role_id = ActiveRecord::Base.connection.execute("select RoleID from GDN_Role where Name='Member'").fetch_row[0]
 		  ActiveRecord::Base.connection.execute("insert into GDN_UserRole(UserID,RoleID) values ("+@member.id.to_s+","+member_role_id+")")
+		  ActiveRecord::Base.connection.execute("insert into GDN_UserMeta(UserID,Name,Value) values ("+@member.id.to_s+",'Preferences.Email.NewDiscussion','1')")
 	      @note = Note.new
 		  @note.member_id = @member.id
 		  @note.content = note_created_with(:member => @member)

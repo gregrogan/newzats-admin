@@ -95,5 +95,13 @@ class ApplicationController < ActionController::Base
   file_name = "userpics/"+file_name;
   return file_name
   end
+
+  def leave_cond()
+    @membershiptype = Membershiptype.find(:all, :conditions=>{:name => "Leave of absence"})[0]
+    if (@membershiptype)
+    	return "membershiptype_id != "+@membershiptype.id.to_s
+    end
+    return "1 = 1"
+  end
   
 end

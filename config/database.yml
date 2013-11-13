@@ -7,6 +7,7 @@ development:
 #  timeout: 5000
   adapter: mysql
   database: newzatsadmindev
+  encoding: utf8
   sochost: localhost
 
 # Warning: The database defined as "test" will be erased and
@@ -21,4 +22,5 @@ test:
 production:
   adapter: mysql
   database: newzatsadmin
+  encoding: utf8
   sochost: localhost

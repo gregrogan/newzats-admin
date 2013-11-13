@@ -7,10 +7,10 @@ class GroupController < ApplicationController
 	  @groups_member = GroupsMember.find(:all, :conditions => { :group_id => @group.id })
 	  @members = Array.new
 	  @groups_member.each do |gm|
-		@member = Member.find(gm.member_id)
-	    if !(@member.deleted)
-			@members << @member
-		end
+	    @member = Member.find(:all, :conditions => ["UserID = ? AND deleted != 1 AND "+leave_cond, gm.member_id])[0]
+	    if @member
+		@members << @member
+            end
 	  end
 	  @members.sort! { |a, b| a.last_name <=> b.last_name }
    end
