@@ -2,6 +2,10 @@
 View membership type
 <% end %> 
 <h1><%= @membershiptype.name %></h1>
+<% if @leave_absence %>
+	<i><%= @leave_msg %></i><br/>
+<% end %>
+<br/>
 <% if @members.blank? %>
 <p>No members currently in this membershiptype.</p>
 <% else %>

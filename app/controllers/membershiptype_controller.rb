@@ -3,6 +3,13 @@ class MembershiptypeController < ApplicationController
       @membershiptypes = Membershiptype.find(:all)
    end
    def show
+	  @leave_absence = false
+	  @leave_msg = ""
+	  if (leave_absence_id.length && leave_absence_id == params[:id])
+		@leave_absence = true
+		@leave_msg = leave_msg
+	  end
+
 	  @membershiptype = Membershiptype.find(params[:id])
 	  @membershiptype_members = Member.find(:all, :conditions => { :membershiptype_id => @membershiptype.id }, :order => :LastName)
 	  @members = Array.new

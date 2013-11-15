@@ -196,6 +196,14 @@ class MemberController < ApplicationController
    end
    def list
       @members = Member.find(:all, :conditions => ["deleted != 1 and "+leave_cond])
+	  @leave_absence = Array.new
+	  @leave_absence_id = ""
+	  @leave_msg = ""
+	  if (leave_absence_id.length > 0)
+		@leave_absence = Member.find(:all, :conditions => [leave_cond_inv])
+		@leave_absence_id = leave_absence_id
+		@leave_msg = leave_msg
+	  end
    end
    def show
       @member = Member.find(params[:id])

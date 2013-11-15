@@ -59,7 +59,11 @@
 <% if @member.region_id && @member.region_id != 0 %><br/>Region: <%= Region.find(@member.region_id).name %><br/><% end %>
 
 <br/>
-Membership type: <%= Membershiptype.find(@member.membershiptype_id).name %><br/>
+Membership type: 
+<% if @member.membershiptype_id %>
+	<%= Membershiptype.find(@member.membershiptype_id).name %>
+<% end %>
+<br/>
 
 <br/>
 Groups: 
@@ -69,8 +73,16 @@ Groups:
 
 <br/><br/>
 <p class="create_update_times">
-details last updated: <%= @member.updated_at.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %><br/>
-date joined: <%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
+details last updated: 
+<% if @member.updated_at %>
+	<%= @member.updated_at.in_time_zone("Auckland").strftime("%d-%b-%Y, %I:%M%p") %>
+<% end %>
+<br/>
+date joined:
+
+<% if @member.created_at %>
+	<%= @member.created_at.in_time_zone("Auckland").strftime("%d-%b-%Y") %>
+<% end %>
 </p>
 
 <div id="notes">

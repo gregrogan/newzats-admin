@@ -95,13 +95,34 @@ class ApplicationController < ActionController::Base
   file_name = "userpics/"+file_name;
   return file_name
   end
+  
+  def leave_absence_id()
+	@membershiptype = Membershiptype.find(:all, :conditions=>{:name => "Leave of absence"})[0]
+	if (@membershiptype)
+		return @membershiptype.id.to_s
+	end
+	return ""
+  end
 
+  def leave_msg()
+    if (leave_absence_id.length > 0)
+		return "People in this group won't appear in email lists or searches"
+	end
+  end  
+  
   def leave_cond()
-    @membershiptype = Membershiptype.find(:all, :conditions=>{:name => "Leave of absence"})[0]
-    if (@membershiptype)
-    	return "membershiptype_id != "+@membershiptype.id.to_s
+    if (leave_absence_id.length > 0)
+    	return "membershiptype_id != "+leave_absence_id
     end
     return "1 = 1"
   end
+
+  def leave_cond_inv()
+    if (leave_absence_id.length > 0)
+    	return "membershiptype_id = "+leave_absence_id
+    end
+    return "1 = 1"
+  end
+
   
 end
