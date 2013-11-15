@@ -200,7 +200,7 @@ class MemberController < ApplicationController
 	  @leave_absence_id = ""
 	  @leave_msg = ""
 	  if (leave_absence_id.length > 0)
-		@leave_absence = Member.find(:all, :conditions => [leave_cond_inv])
+		@leave_absence = Member.find(:all, :conditions => ["deleted !=1 and "+leave_cond_inv])
 		@leave_absence_id = leave_absence_id
 		@leave_msg = leave_msg
 	  end
