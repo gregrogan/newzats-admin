@@ -6,7 +6,8 @@
     <th>Area</th>
     <th>Type</th>
     <th>Since</th>
-    <th>Paid?</th>
+    <th>$ <%= Integer(Time.now.strftime('%Y')) - 1%></th>
+    <th>$ <%= Integer(Time.now.strftime('%Y'))%></th>
     <th>Last updated</th>
   </tr>
 
@@ -35,7 +36,12 @@
 		<% end %>
       </td>
       <td nowrap="true">
-        <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Time.now.strftime('%Y'), :partial => false }) != []) %>
+        <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Integer(Time.now.strftime('%Y'))-1, :partial => false }) != []) %>
+          Yes
+        <% end %>
+      </td>
+      <td nowrap="true">
+        <% if (Payment.find(:all, :conditions => { :member_id => c.id, :year => Integer(Time.now.strftime('%Y')), :partial => false }) != []) %>
           Yes
         <% end %>
       </td>
